@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+    <title>Página de Física EAST</title>
+    
+    <link type="text/css" rel="stylesheet" href="../../css/aulas.css" />   
+    <link type="text/css" rel="stylesheet" href="css_e_js/local.css" />
+
+    <link href='../../comunHtml/syntaxhighlighter/styles/shCore.css' rel='stylesheet' type='text/css' />
+    <link href='../../comunHtml/syntaxhighlighter/styles/shThemeDefault.css' rel='stylesheet' type='text/css' />
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shCore.js' type='text/javascript'></script>
+    <script src='./comunHtml/syntaxhighlighter/scripts/shAutoloader.js' type='text/javascript'></script>
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shBrushXml.js' type='text/javascript'></script>
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shBrushJScript.js' type='text/javascript'></script>
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shBrushCss.js' type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushPython.js" type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushPhp.js" type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushFortran.js" type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushCpp.js"  type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushAsm.js"  type='text/javascript'></script>
+    <script type="text/javascript">
+      SyntaxHighlighter.config.clipboardSwf = '../../comunHtml/syntaxhighlighter/scripts/clipboard.swf';https://tex.stackexchange.com/questions/58141/equations-inside-enumerate-aligned-on-items-number
+      SyntaxHighlighter.all();
+    </script>
+
+     <script>
+       window.MathJax = {
+         tex: {
+           tags: 'ams',
+           inlineMath: [['$', '$'], ['\\(', '\\)']],
+           macros: {
+              bra: ["{\\left\\langle #1 \\right\\rvert}",1],
+              ket: ["{\\left\\lvert #1 \\right\\rangle}",1],
+              braket:["{\\left\\langle #1 \\vert #2 \\right\\rangle}",2],
+              opProj:["{\\left\\lvert #1 \\right\\rangle\\left\\langle #1 \\right\\rvert}",1],
+              opUni:["{\\left\\lvert #1 \\right\\rangle\\left\\langle #1 \\right\\rvert \+ \\left\\lvert #2 \\right\\rangle\\left\\langle #2 \\right\\rvert}",2],
+              arcsec: "{\\operatorname{arcsec}}",
+              arccot: "{\\operatorname{arccot}}",
+              arccsc: "{\\operatorname{arcsc}}",
+              sech: "{\\operatorname{sech}}",
+              csch: "{\\operatorname{csch}}",
+              argsinh: "{\\operatorname{arg sinh}}",
+              argcosh: "{\\operatorname{arg cosh}}",
+              argtanh: "{\\operatorname{arg tanh}}",
+              argcoth: "{\\operatorname{arg coth}}",
+              argsech: "{\\operatorname{arg sech}}",
+              argcsch: "{\\operatorname{arg csch}}",
+              dbar: "{\\mathscr'26\\mkern-12mu \\mathrm{d}}"
+          }
+         }
+       };
+     </script>    
+
+    <script src="../../comunHtml/mathjax_new/tex-chtml.js" id="MathJax-script" async></script>
+    
+    <script type="text/javascript">
+      function newWin(url, name, width) { 
+      window.open(url,name,'scrollbars=yes,resizable=yes, width=' + width);}
+    </script>
+    
+    <script src="../../comunHtml/jquery/dist/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+      $(".expand").click(function(){
+        target_num = $(this).attr("id").split("-")[1];
+        content_id = "#expandable-".concat(target_num);
+        $(content_id).slideToggle('fast');
+      });
+    });
+    </script>
+
+    <style>
+      .expand {
+        font-style: italic;
+        font-size: 12px;
+        cursor: pointer;
+        color: blue;
+      }
+        .expandable {
+        display:none;
+        margin-left: 3%;
+        margin-right: 3%;
+        color: #3e3e3e;
+/*         text-align: justify; */
+      }
+    </style>
+    
+    <style>
+      ol.alpha_list {
+        counter-reset: item;
+        list-style: none;
+      }
+      ol.alpha_list li:before {
+        content: counter(item,  lower-latin) ")  ";
+        counter-increment: item;
+        margin-left: -30px;
+      }
+    </style>
+
+</head>
+
+  <body>
+    <div id="todo">
+
+      <div id="titulo">      
+        <div id="cabezado">
+          <h1>Visão à luz da Física</h1>
+        </div>
+
+        <div >
+          <img src="../../figuras/divisorHorizontal.png" alt="só um divisor"></img>
+        </div>
+
+
+      <!-- Inicio Principal   -->
+      <div id="principal"> 
+      
+      <h2>O LED piscante</h2>
+        
+      <div style="flex: 30%; padding-right: 30px">
+        <a href="javascript:newWin('figuras/fig01.png', 'Zoom', '1650')">
+          <img src="figuras/fig01.png" style="width:100%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 01: À esquerda foto real do dispositivo montado. À direita a representação do mesmo circuíto.
+        </p>
+      </div>
+      
+      <h3>Montagem</h2>
+      
+      <p>
+        Para montagem devem ser seguidos os seguintes passos:
+        <ul>
+          <li>
+            Coloque o Arduino NANO no centro, próximo a um dos extremos da protoboard MB102.
+          </li>
+          <li>
+            No outro extremo do MB102 coloque a fonte de energia respeitando a polaridade: positivo no trilho vermelho e negativo na trilha azul.
+          </li>
+          <li>
+            Distribua o LED branco, o botão e a tela LCD no espaço restante, conforme mostrado na figura acima.
+          </li>
+          <li>
+            A partir do pino D7 do Arduino, conecte um resistor de 330 Ω em série ao terminal positivo (a perna mais longa) do LED branco transparente. O outro extremo do LED deve ser ligado ao trilho azul da protoboard.
+          </li>
+          <li>
+            Coloque o botão no meio do protoboard (ver figura 1). A configuração adoptada para a ligação com o Arduino é a chamada “Pull-down”: Um dos lados do botão é conectado à fonte de energia, ou seja, a um terminal ao trilho vermelho, e o outro terminal é conectado ao trilho azul através de um resistor de 10 kΩ. Um dois outros dois terminais (aquele oposto à terminal em série com resistência) é ligado diretamente ao pino D6 do Arduino.
+          </li>
+          <li>
+            Conecte o terminal central do potenciômetro de 1 kΩ ao pino A0 do Arduino. Os outros terminais devem ser ligados aos trilhos azul e vermelho para fornecer energia.
+          </li>
+          <li>
+            O terminal GND da telinha LCD deve ser ligado à trilha vermelha do protoboard e o terminal VCC à trilha azul. Os terminais SDA e SCL devem ser ligados aos pinos A4 e A5 do Arduino, respectivamente.
+          </li>
+        </ul>
+      </p>
+      
+      <div style="flex: 30%; padding-right: 30px">
+        <a href="javascript:newWin('figuras/fig01.png', 'Zoom', '1650')">
+          <img src="figuras/fig02.png" style="width:100%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 02: Esquema de ligação entre os componentes do dispositivo
+        </p>
+      </div>
+      
+      <h3>Programação</h3>
+      
+      <pre class="brush: cpp;">
+        #include&lt;Wire.h&gt;
+        &lt;Adafruit_GFX.h&gt;
+        &lt;Adafruit_SSD1306.h&gt;
+
+        Adafruit_SSD1306 display = Adafruit_SSD1306();
+        void calibra();
+        //SDA --> A4
+        //SCL --> A5
+        int volPWM = 0;
+        int valor_pot = 0;
+        int pinLed = 7;
+        int pinoBot = 6;
+        unsigned long t1, t2, ttemp;
+        bool estado = false;
+        bool teste = false;
+        int sitBotao = 0;
+        unsigned long t1Local, Dc1p, Dc1m, T1;
+        unsigned long contaP1, contaM1;
+        void setup() {
+          Wire.begin();
+          display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+          display.setTextColor(WHITE);
+          display.setTextSize(1);
+          display.setRotation(2);
+          display.clearDisplay();
+          Serial.begin(57600);
+          pinMode(pinLed, OUTPUT);
+          pinMode(pinoBot, INPUT);
+          t1 = micros();
+        }
+        void loop() {
+          t2 = micros();
+          valor_pot = analogRead(A0);
+          volPWM
+            = map(valor_pot, 0, 1023, 1, 32768);
+          if (t2 - t1 >= volPWM) {
+            t1 = t2;
+            digitalWrite(pinLed, estado);
+            estado = !estado;
+          }
+          sitBotao = digitalRead(pinoBot);
+          if (sitBotao == HIGH) CalculaFeq();
+        }
+        void CalculaFeq() {
+          display.clearDisplay();
+          display.setCursor(1, 1);
+          display.print("Ajustando Periodo ...");
+          display.display();
+          t1Local = micros();
+          do {
+            t2 = micros();
+            if (t2 - t1 >= volPWM) {
+              t1 = t2;
+              digitalWrite(pinLed, estado);
+              estado = !estado;
+            }
+          } while (micros() - t1Local < 5000000);
+          display.clearDisplay();
+          display.setCursor(3, 10);
+          display.print("Calc. Periodo ...");
+          display.display();
+          Dc1p = 0;
+          Dc1m = 0;
+          contaP1 = 0;
+          contaM1 = 0;
+          t1Local = t1;
+          do {
+            t2 = micros();
+            if (t2 - t1 >= volPWM) {
+              ttemp = t1;
+              t1
+                = t2;
+              digitalWrite(pinLed, estado);
+              if (estado == true) {
+                Dc1p += t2 - ttemp;
+                contaP1 += 1;
+              } else {
+                Dc1m += t2 - ttemp;
+                //Serial.println(t2 - ttemp);
+                contaM1 += 1;
+              }
+              estado = !estado;
+            }
+          } while (micros() - t1Local < 20000000);
+          Dc1p = (float) Dc1p / (float) contaP1;
+          Dc1m = (float) Dc1m / (float) contaM1;
+          T1 = Dc1p + Dc1m;
+          display.clearDisplay();
+          display.setCursor(1, 1);
+          display.print("Periodo e Duty Cycle:");
+          display.setCursor(1, 10);
+          display.print("Led: ");
+          display.print(T1);
+          display.print(" us, ");
+          display.print((int)(100.0 * (float) Dc1p / (float) T1));
+          display.print(", ");
+          display.print((int)(100.0 * (float) Dc1m / (float) T1));
+          display.display();
+        }
+      </pre>
+      
+      
+      
+       
+      
+<!--      <h6><a href="exemplos/exemplo3.1.39.html" target="_blank">Exemplo 3.1.39</a></h6>
+      <p>
+        Avalie a integral
+        \[
+          I= \iint_R \sqrt{x^2 + y^2} dA
+        \]
+        onde $R$ é a região delimitada pela curvas $x^2 +y^2=2x$,  $x^2 + y^2 = 4x$, $y=x$ e e $y=\dfrac{\sqrt{3}}{3}x$.
+      </p>-->     
+      
+<!--       <script src="../../../../../../css_e_js/math07.js"></script> -->
+      
+      <!--
+            
+      <img src="../../../../../../figuras/linha_b.png">  
+      
+      
+      
+      <div style="width:100%;margin-left: auto;margin-right: auto;">
+        <div style="display: flex; padding-bottom: 0px;">
+        
+          <div style="flex: 30%; padding-right: 30px">
+            <a href="javascript:newWin('figuras/figCone02_a.png', 'Zoom', '1650')">
+              <img src="figuras/figCone02_a.png" style="width:100%">
+            </a>
+            <p style="text-align: center; font-size:80%">
+              <b>a)</b> Gráfico de $\displaystyle f(x,y)=\sqrt{x^2+y^2}$
+            </p>
+          </div>
+          
+          <div style="flex: 30%; padding-left: 30px;">
+            <a href="javascript:newWin('figuras/figCone02_b1.png', 'Zoom', '1650')">
+              <img src="figuras/figCone02_b1.png" style="width:100%">
+            </a>
+            <p style="text-align: center; font-size:80%">
+              <b>b)</b> Interseções de planos com cone
+            </p>
+          </div>
+          
+          <div style="flex: 30%; padding-left: 30px;">
+            <a href="javascript:newWin('figuras/figCone02_b2.png', 'Zoom', '1650')">
+              <img src="figuras/figCone02_b2.png" style="width:100%">
+            </a>
+            <p style="text-align: center; font-size:80%">
+              <b>c)</b> Analise do gráfico do cone $\displaystyle f(x,y)=\sqrt{x^2+y^2}$
+            </p>
+          </div>
+          
+        </div>
+      </div>
+      
+
+      
+      <figure style="margin-top:-30px">
+        <div class = "ggbContainer"> 
+          <a href="https://www.geogebra.org/material/iframe/id/dhppzd7w/width/836/height/502/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false" width="836px" height="502px" style="border:0px;" width="836px" height="502px" style="border:0px;">
+            Abrir com o<br>GeoGebra
+          </a>
+          <img src="figuras/curvasDeNivelGeo.png" width="836px" height="502px" alt="polar_coordinates" class="border" >
+          <iframe src="figuras/curvasDeNivelGeo.png" allowfullscreen width="836px" height="502px" class="hiddenIframe"></iframe>
+        </div>       
+      </figure>
+      -->
+      
+<!--
+
+
+
+
+    <h6><a href="exemplos/exemplo1.4.23.html" target="_blank">Exemplo Q1.4.23</a></h6>
+        Encontre a área do refletor parabólico cuja forma se obtém ao rotar o arco parabólico $y=x^2$, $9\leq x \leq 1$ ao redor do eixo $y$
+      <p>-->
+      
+    <!--  
+      <h6><a href="exemplos/exemplo1.4.22.html" target="_blank">Exemplo Q1.4.22</a></h6>
+      
+      <p>
+        
+      </p>    <h6><a href="exemplos/exemplo1.4.2.html" target="_blank">Exemplo Q1.4.3</a></h6>
+      
+      <p>
+        
+      </p>-->
+      
+     
+      
+<!--      <h5>Exemplo 3</h5>
+      <p>
+        Escreva a identidade de Parseval correspondente ao problema \ref{ex1.3.2}.\ref{ex397}
+      </p>-->
+<!--
+      \left( \right)   \left|\, z \,\right|  
+      
+      \left[ \right]   \left\{ \righ\}
+        
+        \begin{align*}
+        \end{align*}
+       
+      <ol>
+        <li>
+          
+        </li>
+        <li>
+          
+        </li>
+      </ol>
+        
+        \[
+          \begin{bmatrix}
+          \end{bmatrix}
+        \]
+      
+
+      <div align="center">
+        <a href="javascript:newWin('figuras/fig01.png', 'Zoom', '1650')">
+          <img src="figuras/fig01.png" width="400" align="center">
+        </a>
+          <p style="padding-left: 50px; padding-right: 50px; text-align: justify;font-size: 75%;">
+            Figura 01:  Sistema massa mola.
+          </p>
+      </div>
+      
+      
+      
+      <div style='padding: 15px; width: 425px;float:right;'>
+          <img src="figuras/Bessel32.gif" width="400" align="right">
+          <p style="padding-left: 50px; padding-right: 50px; text-align: justify;font-size: 75%;">
+            Figura 01:  Uma solução do problema da membrana vibrante a qual é dada em termos da funções de Bessel.
+          </p>
+      </div>
+      
+      <h5>Exemplo 03</h5>
+      
+      <p>
+        
+        <img src="figuras/linha_b.png">
+      </p>
+         
+      <table class="tabela_de_lista2">      
+      <tr>
+      <td class="definicaotitulo">
+        Definição de função vetorial
+      </td>
+      </tr>
+      <tr>
+      <td class="definicao">
+      <p><em>
+        
+      </em></p>
+      </td></tr>
+      </table>
+      
+      <table class="tabela_de_lista2">      
+      <tr>
+      <td class="teorematitulo">
+        Teorema
+      </td>
+      </tr>
+      <tr>
+      <td class="teorema">
+      <p><em>
+        
+      </em></p>
+      </td></tr>
+      </table>
+      
+-->
+      
+      
+      </div>
+      <!-- Fim Principal   -->      
+    </div>
+    <!-- Fim todo   -->
+  </body>
+</html>

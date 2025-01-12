@@ -1,0 +1,112 @@
+#todo {
+  width:            900px;
+  padding-top:      10px;
+  padding-bottom:   5px;
+  margin-left:      auto;
+  margin-right:     auto;
+}
+
+#cabezado h1 {
+  width:        750px;
+  font-family: 'Times New Romans';
+  text-align: center;
+  color: #004F95;
+}
+
+#indice {
+  padding:  0px 0px 0px 15px;  /* em cima,  direita, embaixo, esquerda */
+  margin: 0px;
+  list-style:  none;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  color: #333333;
+  overflow: hidden;
+}
+
+#indice li {
+  float: left;
+  width: 7em;
+}
+
+#indice a:link {color: #cc5500; font-weight: bold; text-decoration: none;}
+#indice a:visited {color: #cc5500; font-weight: bold; text-decoration: none;}
+#indice a:hover {color: #cc5500; font-weight: bold; text-decoration: none; background-color: #fff3e8;}
+
+
+#divVert{
+  width:               2px;
+  padding:             10px 8px 7px 10px;
+  float:               left;
+}
+
+#principal {
+  width:               730px;
+  padding:             10px 10px 10px 20px; /* #em cima, ра direita, embaixo, ра esquerda */
+  margin:              0px 10px 10px 0px;
+  text-align:          justify;
+  float:               left;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  color: #333333;
+}
+
+#principal a:link {color: #cc5500; text-decoration: none;}
+#principal a:visited {color: #cc5500;  text-decoration: none;}
+#principal a:hover {color: #cc5500; text-decoration: none; background-color: #fff3e8;}
+
+#principal h2, h3, h4 {
+  color: #636363;
+}
+
+#principal .texto_esp1 {
+  text-decoration: underline;
+  color: #000000;
+}
+
+#principal .texto_tab {
+  margin-left: 50px;
+}
+
+#principal .lista_letra_minusculas {
+  list-style-type: lower-alpha;
+}
+
+#principal .tabela_de_lista {
+  margin-left: 40px;
+  margin-right: 20px;
+  text-align: center;
+  width: 90%;
+  border: thin solid #cc5500;
+  border-collapse: collapse;
+}
+
+#principal td, th {
+  border: thin dotted #FF6A00;
+  padding: 5px;
+}
+
+#principal .titulos_de_tabela_de_lista {
+  background-color: #E6E5C0;
+  font-size: 18px;
+  text-align: center;
+  color: #636363;
+}
+
+#principal .linhai_de_tabela_de_lista {
+  background-color: #FFFFFF;
+}
+
+#principal .linhap_de_tabela_de_lista {
+  background-color: #FDFCD4;
+}
+
+#principal .tabela_de_freq {
+/*   margin-left: 40px; */
+  margin-right: 20px;
+  text-align: left;
+  border: thin solid #cc5500;
+  border-collapse: collapse;
+  font-size: 7px;
+}
