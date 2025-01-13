@@ -117,6 +117,12 @@
       <div id="principal"> 
       
       <h2>O LED piscante</h2>
+      
+      <h3>Descrição da experiência</h3>
+      
+      <p>
+        Nestas experiência o aluno exploram uma limitação do nosso sistema de visão. Nossos olhos não são capazes de resolver entre dois eventos que estejam separados temporalmente por um intervalo menor a um determinado $T_{min}$. Para determinar este $T_{min}$ propomos uma experiência na qual o aluno ajusta o tempo entre piscadas de um LED.  O arranjo experimental desenvolvido para esse fim é mostrado na figura 01.
+      </p>
         
       <div style="flex: 30%; padding-right: 30px">
         <a href="javascript:newWin('figuras/fig01.png', 'Zoom', '1650')">
@@ -127,7 +133,42 @@
         </p>
       </div>
       
-      <h3>Montagem</h2>
+      <h3>Aplicação</h3>
+      
+      <p>
+        Para a realização da experiência os alunos devem ajustar o potenciômetro até o ponto em que não é mais possível distinguir entre duas piscadas consecutivas, nesse instante o botão branco deve ser  apertado e o período de piscadas será apresentado na tela LCD.
+      </p>
+      
+      <h3>Materiais</h3>
+      
+      <ul>
+        <li>
+          1 Arduino nano
+        </li>
+        <li>
+          1 Potenciômetro, $P_1 = 1 k\Omega$
+        </li>
+        <li>
+          2 Resistores, $R_1 = 330 \Omega$ e $R_2 = 1 k\Omega$
+        </li>
+        <li>
+          1 LED branco
+        </li>
+        <li>
+          1 telinha OLED de 0,96 polegadas
+        </li>
+        <li>
+          1 botão - "push button"
+        </li>
+        <li>
+          1 matriz de contato ou protoboard MB102
+        </li>
+        <li>
+          1 fonte ajustável para protoboard
+        </li>
+      </ul>
+      
+      <h3>Montagem</h3>
       
       <p>
         Para montagem devem ser seguidos os seguintes passos:
@@ -164,6 +205,12 @@
           Figura 02: Esquema de ligação entre os componentes do dispositivo
         </p>
       </div>
+      
+      <h4>Explicação do funcionamento do dispositivo</h4>
+      <p>
+        Nesta montagem, o potenciômetro atua como um divisor de tensão. Portanto, o pino A0 do Arduino registra valores de tensão entre 0 V e 5 V. Esses valores de tensão são mapeados em 1024 possibilidades, o que resulta em uma resolução de aproximadamente 4,89 mV por intervalo. Em seguida, o Arduino converte cada intervalo de tensão em um intervalo de tempo Δt, que corresponde a aproximadamente 32 µs. Ou seja, 0V corresponde a 32 µs, e 5V correspondem a 32,768 ms. Esses valores temporais determinam o período durante o qual o Arduino mantém o LED ligado e, em seguida, o desliga durante o mesmo tempo. Portanto, o período de piscado corresponde ao dobro de Δt.
+      </p>
+      
       
       <h3>Programação</h3>
       
