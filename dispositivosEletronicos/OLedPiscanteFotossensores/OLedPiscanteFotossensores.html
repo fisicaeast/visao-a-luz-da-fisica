@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+    <title>Página de Física EAST</title>
+    
+    <link type="text/css" rel="stylesheet" href="../../css/aulas.css" />   
+    <link type="text/css" rel="stylesheet" href="css_e_js/local.css" />
+
+    <link href='../../comunHtml/syntaxhighlighter/styles/shCore.css' rel='stylesheet' type='text/css' />
+    <link href='../../comunHtml/syntaxhighlighter/styles/shThemeDefault.css' rel='stylesheet' type='text/css' />
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shCore.js' type='text/javascript'></script>
+    <script src='./comunHtml/syntaxhighlighter/scripts/shAutoloader.js' type='text/javascript'></script>
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shBrushXml.js' type='text/javascript'></script>
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shBrushJScript.js' type='text/javascript'></script>
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shBrushCss.js' type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushPython.js" type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushPhp.js" type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushFortran.js" type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushCpp.js"  type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushAsm.js"  type='text/javascript'></script>
+    <script type="text/javascript">
+      SyntaxHighlighter.config.clipboardSwf = '../../comunHtml/syntaxhighlighter/scripts/clipboard.swf';https://tex.stackexchange.com/questions/58141/equations-inside-enumerate-aligned-on-items-number
+      SyntaxHighlighter.all();
+    </script>
+
+     <script>
+       window.MathJax = {
+         tex: {
+           tags: 'ams',
+           inlineMath: [['$', '$'], ['\\(', '\\)']],
+           macros: {
+              bra: ["{\\left\\langle #1 \\right\\rvert}",1],
+              ket: ["{\\left\\lvert #1 \\right\\rangle}",1],
+              braket:["{\\left\\langle #1 \\vert #2 \\right\\rangle}",2],
+              opProj:["{\\left\\lvert #1 \\right\\rangle\\left\\langle #1 \\right\\rvert}",1],
+              opUni:["{\\left\\lvert #1 \\right\\rangle\\left\\langle #1 \\right\\rvert \+ \\left\\lvert #2 \\right\\rangle\\left\\langle #2 \\right\\rvert}",2],
+              arcsec: "{\\operatorname{arcsec}}",
+              arccot: "{\\operatorname{arccot}}",
+              arccsc: "{\\operatorname{arcsc}}",
+              sech: "{\\operatorname{sech}}",
+              csch: "{\\operatorname{csch}}",
+              argsinh: "{\\operatorname{arg sinh}}",
+              argcosh: "{\\operatorname{arg cosh}}",
+              argtanh: "{\\operatorname{arg tanh}}",
+              argcoth: "{\\operatorname{arg coth}}",
+              argsech: "{\\operatorname{arg sech}}",
+              argcsch: "{\\operatorname{arg csch}}",
+              dbar: "{\\mathscr'26\\mkern-12mu \\mathrm{d}}"
+          }
+         }
+       };
+     </script>    
+
+    <script src="../../comunHtml/mathjax_new/tex-chtml.js" id="MathJax-script" async></script>
+    
+    <script type="text/javascript">
+      function newWin(url, name, width) { 
+      window.open(url,name,'scrollbars=yes,resizable=yes, width=' + width);}
+    </script>
+    
+    <script src="../../comunHtml/jquery/dist/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+      $(".expand").click(function(){
+        target_num = $(this).attr("id").split("-")[1];
+        content_id = "#expandable-".concat(target_num);
+        $(content_id).slideToggle('fast');
+      });
+    });
+    </script>
+
+    <style>
+      .expand {
+        font-style: italic;
+        font-size: 12px;
+        cursor: pointer;
+        color: blue;
+      }
+        .expandable {
+        display:none;
+        margin-left: 3%;
+        margin-right: 3%;
+        color: #3e3e3e;
+/*         text-align: justify; */
+      }
+    </style>
+    
+    <style>
+      ol.alpha_list {
+        counter-reset: item;
+        list-style: none;
+      }
+      ol.alpha_list li:before {
+        content: counter(item,  lower-latin) ")  ";
+        counter-increment: item;
+        margin-left: -30px;
+      }
+    </style>
+
+</head>
+
+  <body>
+    <div id="todo">
+
+      <div id="titulo">      
+        <div id="cabezado">
+          <h1>Visão à luz da Física</h1>
+        </div>
+
+        <div >
+          <img src="../../figuras/divisorHorizontal.png" alt="só um divisor"></img>
+        </div>
+
+
+      <!-- Inicio Principal   -->
+      <div id="principal"> 
+      
+      <h2>O LED piscante e os fotossensores</h2>
+      
+      <p>
+        Sensores eletrônicos utilizados para a visão artificial também apresentam limitações. Com este dispositivo experimental procuramos determinar qual é o intervalo mínimo, $T_{min}$, entre duas piscadas de um LED que um sensor eletrônico consegue resolver.
+      </p>
+        
+      <div  align="center">
+        <a href="javascript:newWin('figuras/fig01.png', 'Zoom', '1650')">
+          <img src="figuras/fig01.png" style="width:100%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 01: À esquerda foto real do dispositivo experimental. À direita a representação do mesmo circuíto.
+        </p>
+      </div>
+      
+      <h3>Aplicação</h3>
+      
+      <p>
+        A partir do potenciômetro do dispositivo os estudante podem alterar o tempo de piscada do LED $L1$. O LED $L1$ (branco) é colocado em contato direto com o sensor eletrônico, como mostrado na figura 2. O sensor eletrônico converte essa luz em uma tensão que é interpretada pelo Arduino como um sinal para ligar um segundo LED $L2$ (branco quente). Como resultado de todo esse processo os estudante observarão dois LED piscando em sincronia e a perda dessa sincronia será interpretado com um perda da capacidade do sensor em dar seguimento ao tempo de piscado do LED $L1$; nesse instante o botão branco deve ser apertado e o período de piscadas será apresentado na tela LCD.
+      </p>
+        
+      <div  align="center">
+        <a href="javascript:newWin('figuras/fig02.png', 'Zoom', '1650')">
+          <img src="figuras/fig02.png" style="width:70%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 02: O sensor é colocado em contato direto ao LED $L1$. A informação captada por esse sensor é traduzida pelo Arduino e resulta no acionamento do LED $L2$
+        </p>
+      </div>
+      
+      <h3>Materiais</h3>
+      
+      <ul>
+        <li>
+          1 Arduino nano
+        </li>
+        <li>
+          1 Potenciômetro, $P_1 = 5 k\Omega$
+        </li>
+        <li>
+          4 Resistores, $R_1 = 330 \Omega$, $R_2 = 330 \Omega$, $R_3 = 1 k\Omega$,  e $R_4 = 10 k\Omega$
+        </li>
+        <li>
+          2 LEDs, um branco, $L1$ e outro branco quente, $L2$
+        </li>
+        <li>
+          2 sensores eletrônicos: uma foto resistência ou LDR e um fotodio modelo BPW34
+        </li>
+        <li>
+          1 telinha OLED de 0,96 polegadas
+        </li>
+        <li>
+          1 botão - "push button"
+        </li>
+        <li>
+          1 matriz de contato ou protoboard MB102
+        </li>
+        <li>
+          1 fonte ajustável para protoboard
+        </li>
+      </ul>
+      
+      <h3>Montagem</h3>
+      
+      <p>
+        Para montagem devem ser seguidos os seguintes passos:
+        <ul>
+          <li>
+            Coloque o Arduino NANO no centro, próximo a um dos extremos da protoboard MB102.
+          </li>
+          <li>
+            No outro extremo do MB102 coloque a fonte de energia respeitando a polaridade: positivo no trilho vermelho e negativo na trilha azul.
+          </li>
+          <li>
+            Distribua o LED branco, o sensor de luz, o LED branco quente, a tela OLED e o botão, no espaço restante, conforme mostrado na figura 1.
+          </li>
+          <li>
+            A partir do pino D11 do Arduino, conecte um resistor de $R_1 = 330 \Omega$ em série ao terminal positivo (a perna mais longa) do LED branco transparente. O outro extremo do LED deve ser ligado ao trilho azul da protoboard.
+          </li>
+          <li>
+            A partir do pino D12 do Arduino, conecte um resistor de $R_2 = 330 \Omega$ em série ao terminal positivo (a perna mais longa) do LED branco transparente. O outro extremo do LED deve ser ligado ao trilho azul da protoboard.
+          </li>
+          <li>
+            Coloque o botão próximo à fonte de alimentação do protoboard (ver figura 1). A configuração adotada para a ligação com o Arduino é a chamada “Pull-down”: Um dos lados do botão é conectado à fonte de energia, ou seja, um terminal ao trilho vermelho, e o outro terminal é conectado ao trilho azul através de um resistor de $R_2 = 10 k\Omega$. Um dois outros dois terminais (aquele oposto à terminal em série com resistência) é ligado diretamente ao pino D6 do Arduino.
+          </li>
+          <li>
+            Conecte o terminal central do potenciômetro de $P_1 = 5 k\Omega$ ao pino A0 do Arduino. Os outros terminais devem ser ligados aos trilhos azul e vermelho para fornecer energia.
+          </li>
+          <li>
+            O terminal GND da telinha OLED deve ser ligado à trilha vermelha do protoboard e o terminal VCC à trilha azul. Os terminais SDA e SCL devem ser ligados aos pinos A4 e A5 do Arduino, respectivamente.
+          </li>
+        </ul>
+      </p>
+      
+      <p>
+        Foram utilizados duas versões do dispositivo, uma utilizando como sensor uma foto resistência ou LDR (<a href="https://www.alldatasheet.com/html-pdf/1131896/ETC2/GL5539/110/1/GL5539.html" target="_blank">Datasheet do LDR - GL5516</a>) e outra utilizando o foto diodo BPW34 (<a href="https://www.alldatasheet.com/datasheet-pdf/pdf/26251/VISHAY/BPW34.html" target="_blank">Datasheet do BPW34</a>).  O motivo dessa escolha é que o LDR é um sensor muito popular e "lento", enquanto o fotodiodo é um foto sensor que é mais "rápido", quando comparado com o LDR. O qual é uma caraterística desejada para o experimento pretendido. Outra caraterística é que a curva espectral do LDR se assemelha à curva espectral do olho humano.
+      </p>
+      
+      <h4>Montagem utilizando o LDR</h4>
+      
+      <p>
+        Conforme mostrado na Figura 03, o LDR é integrado ao circuito como parte de um divisor de tensão. Esse divisor é composto pelo circuito em série formado pelo resistor $R_3 = 1k\Omega$ e o fotodiodo LDR. As extremidades desse circuito em série são conectadas às trilhas de alimentação da fonte no protoboard. O ponto de conexão entre o resistor $R_3$ e o LDR forma um nó, que está ligado à entrada analógica A1 do Arduino.
+      </p>
+      
+      <div style="flex: 30%; padding-right: 30px">
+        <a href="javascript:newWin('figuras/fig03.png', 'Zoom', '1650')">
+          <img src="figuras/fig03.png" style="width:100%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 03: Esquema de ligação entre os componentes do dispositivo
+        </p>
+      </div>
+      
+      <h5 id="LDR_funcionamento">Explicação do funcionamento do dispositivo</h5>
+      
+      <p>
+        O funcionamento do potenciômetro neste dispositivo é igual ao <a href="../oLedPiscante/oLedPiscante.html#funcionamentoPiscaLed" target="_blank">funcionamento do potenciômetro no dispositivo do LED piscante</a>
+      </p>
+      
+      <p>
+        Para entender como o LDR se integra neste dispositivo, é necessário compreender o funcionamento do LDR. Trata-se de um resistor cuja resistência diminui conforme a intensidade de luz incidente sobre ele aumenta. Uma forma de utilizar esse sensor é registrando a variação da tensão entre seus terminais. Por esse motivo, o LDR é configurado em série com outro resistor de valor similar. Assim, a tensão no terminal do resistor de controle em série com o LDR, no escuro, será aproximadamente metade da tensão total aplicado ao circuito. Quando a luz incide sobre o LDR, sua resistência efetiva diminui conforme a intensidade luminosa, resultando em um aumento da tensão sobre o resistor de controle. Em nossa montagem essa tensão sobre o resistor de controle é  é registrado pela porta A1 do Arduino.
+      </p>
+      
+      <p>
+        Devido a que experiência é realizada durante o dia, o dispositivo primeiro determina o fundo de luminosidade do meio. Para isso, é mapeado o maior valor da tensão durante 1000 amostragens realizadas a cada milissegundo. Esse processo é repetido 20 vezes e, ao final, é calculado o valor médio.
+      </p>
+      
+      <p>
+        Esse valor de referência é utilizado pelo Arduino para identificar se o LED L1, posicionado em frente ao sensor LDR, está ligado ou desligado. No programa, considera-se que o LED L1 está ligado se o nível de tensão registrado no pino A1 for maior ou igual a 0,7079 vezes o valor de referência; caso contrário, o LED L1 é considerado desligado.
+      </p>
+      
+      <p>
+        Quando o Arduino determina que o LED L1 está ligado, ativa automaticamente o LED L2. Da mesma forma, se o LED L1 for desligado, o LED L2 também é desativado. Como o tempo de processamento do Arduino é da ordem de microssegundos, o intervalo de reação entre identificar o estado de L1 e reproduzi-lo em L2 é desprezível. Assim, para fins práticos, podemos considerar que o dispositivo mantém os dois LEDs sincronizados, com exceção dos casos em que o LDR não consiga acompanhar adequadamente a frequência de liga-desliga de L1.
+      </p>
+      
+      
+      <h5>Programação</h5>
+      
+      <pre class="brush: cpp;">
+        #include&lt;Wire.h&gt;
+        &lt;Adafruit_GFX.h&gt;
+        &lt;Adafruit_SSD1306.h&gt;
+
+        Adafruit_SSD1306 display = Adafruit_SSD1306();
+
+        void calibra();
+        //SDA --> A4
+        //SCL --> A5
+
+        int volPWM=0;
+        int valor_pot=0, maxValorLuz;
+        int pinLed=12;
+        int pinLed2=11;
+        int pinoBot=6;
+        unsigned long t1, t2, ttemp, tLdr, tLdrOld, dt = 60;
+        bool estado = false, estadoLdr = false, estadoLdrOld = false;
+        bool teste = false;
+
+        int pinoSensorLuz = A1;          	 
+        int valorLuz = 0;
+        int sitBotao = 0;
+
+        unsigned long t1Local, Dc1p, Dc2p, Dc1m, Dc2m, T1, T2;
+        unsigned long contaP1, contaM1, contaP2, contaM2;
+
+        void setup() {
+          Wire.begin();
+          display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+          display.setTextColor(WHITE);
+          display.setTextSize(1);
+          display.setRotation(2);
+          display.clearDisplay();
+        
+          Serial.begin(57600);
+          pinMode(pinLed,OUTPUT);
+          pinMode(pinLed2,OUTPUT);
+          pinMode(pinoBot, INPUT);
+          t1 = millis();
+          calibra();
+        }
+
+        void calibra(){
+          int conta, acumula;
+        
+          display.clearDisplay();
+          display.setCursor(1,1);
+          display.print("calibrando ...");
+          display.display();
+        
+          t1Local = t1;
+          maxValorLuz = 0;
+          acumula 	= 0;
+          conta   	= -3;
+
+          do{
+          t2 = millis();
+          if (t2 - t1 >= 1000){
+            t1 = t2;
+            digitalWrite(pinLed,estado);
+            estado   = !estado;
+
+            Serial.println(maxValorLuz);	 
+            conta++;
+            if (conta > 0) acumula += maxValorLuz;
+          }
+          valorLuz  = analogRead(pinoSensorLuz);
+          if (valorLuz > maxValorLuz) maxValorLuz = valorLuz;
+          } while (millis() - t1Local < 20000);
+        
+          maxValorLuz = acumula / conta;
+          Serial.print("valor medio = ");
+          Serial.println(maxValorLuz);
+
+          display.clearDisplay();
+          display.setCursor(1,1);
+          display.print("calibracao:");
+          display.setCursor(1,10);
+          display.print("Max. val escuro = ");
+          display.print(maxValorLuz);
+        
+          maxValorLuz *= 0.7079;  //-3db --> 10^(-3.0/20.)
+          Serial.print("-3db = ");
+          Serial.println(maxValorLuz);
+
+          display.setCursor(1,20);
+          display.print("-3db = ");
+          display.print(maxValorLuz);
+          display.display();
+        }
+
+        void loop() {
+          t2 = millis();
+          valor_pot = analogRead(A0);
+          volPWM	= map(valor_pot,0,1023,1,512);
+          if (t2 - t1 >= volPWM){
+          t1 = t2;
+          digitalWrite(pinLed,estado);
+          estado = !estado;
+        }
+        
+          valorLuz  = analogRead(pinoSensorLuz);
+          if(valorLuz>maxValorLuz)
+          {           	 
+          digitalWrite(pinLed2,LOW);
+          }
+          else
+          {               	 
+          digitalWrite(pinLed2,HIGH);
+          }
+          sitBotao = digitalRead(pinoBot);
+          if (sitBotao == HIGH) CalculaFeq();
+        }
+
+        void CalculaFeq(){
+        
+          display.clearDisplay();
+          display.setCursor(1,1);
+          display.print("Ajustando Freq ...");
+          display.display();
+
+          t1Local = millis();
+          do {
+          t2 = millis();
+          if (t2 - t1 >= volPWM){
+            t1 = t2;
+            digitalWrite(pinLed,estado);
+            estado = !estado;
+          }
+            
+          valorLuz  = analogRead(pinoSensorLuz);
+          if(valorLuz>maxValorLuz)  {
+            digitalWrite(pinLed2,LOW);
+            estadoLdr = true;
+          } else   {
+            digitalWrite(pinLed2,HIGH);
+            estadoLdr = false;
+          }    
+          } while (millis() - t1Local < 20000);
+        
+          tLdr	= millis();
+          tLdrOld = tLdr;
+          estadoLdrOld = estadoLdr;
+        
+          display.clearDisplay();
+          display.setCursor(3,10);
+          display.print("Calc. Freq. ...");
+          display.display();
+        
+          Dc1p = 0;
+          Dc2p = 0;
+          Dc1m = 0;
+          Dc2m = 0;
+
+          contaP1 = 0;
+          contaM1 = 0;
+          contaP2 = 0;
+          contaM2 = 0;
+
+          t1Local = t1;
+          do {
+          t2 = millis();
+          if (t2 - t1 >= volPWM){
+            ttemp = t1;
+            t1	= t2;
+            digitalWrite(pinLed,estado);
+            if (estado == true){
+              Dc1p += t2 - ttemp;
+              contaP1 += 1;
+            } else {
+              Dc1m += t2 - ttemp;
+              contaM1 += 1;
+            }
+            estado = !estado;
+          }
+            
+          valorLuz  = analogRead(pinoSensorLuz);    
+            
+          if(valorLuz>maxValorLuz)  {
+            digitalWrite(pinLed2,LOW);
+            estadoLdr = false;
+          } else   {
+            digitalWrite(pinLed2,HIGH);
+            estadoLdr = true;
+          }
+
+          if (estadoLdrOld != estadoLdr){
+            tLdrOld = tLdr;
+            tLdr = millis();
+            if (estadoLdrOld) {
+              Dc2p += tLdr - tLdrOld;
+              contaP2 += 1;
+            } else{
+              Dc2m += tLdr - tLdrOld;
+              contaM2 += 1;
+            }
+            estadoLdrOld = estadoLdr;
+          }
+            
+          } while (millis() - t1Local < 20000);
+
+          Dc1p = (float) Dc1p / (float) contaP1;
+          Dc1m = (float) Dc1m / (float) contaM1;
+          T1   = Dc1p + Dc1m;
+
+          Dc2p = (float) Dc2p / (float) contaP2;
+          Dc2m = (float) Dc2m / (float) contaM2;
+          T2   = Dc2p + Dc2m;
+        
+          display.clearDisplay();
+          display.setCursor(1,1);
+          display.print("Frequencias e Duty:");
+          display.setCursor(1,10);
+          display.print("Led: ");
+          display.print(T1);
+          display.print(" ms, ");
+          display.print((int) (100.0 * (float) Dc1p / (float) T1));
+          display.print(", ");
+          display.print((int) (100.0 * (float) Dc1m / (float) T1));
+
+          display.setCursor(1,20);
+          display.print("Ldr: ");
+          display.print(T2);
+          display.print(" ms, ");
+          display.print((int) (100.0 * (float) Dc2p / (float) T2));
+          display.print(", ");
+          display.print((int) (100.0 * (float) Dc2m / (float) T2));
+        
+          display.display();
+        }
+      </pre>
+      
+      
+      
+      <h4>Montagem utilizando o BPW34</h4>
+      
+      <p>
+        Conforme mostrado na Figura 04, o BPW34 é integrado ao circuito como parte de um divisor de tensão. Esse divisor é composto pelo circuito em série formado pelo resistor $R_3 = 1k\Omega$ e o fotodiodo BPW34. As extremidades desse circuito em série são conectadas às trilhas de alimentação da fonte no protoboard. O ponto de conexão entre o resistor $R_3$ e o BPW34 forma um nó, que está ligado à entrada analógica A1 do Arduino.
+      </p>
+      
+      <div style="flex: 30%; padding-right: 30px">
+        <a href="javascript:newWin('figuras/fig04.png', 'Zoom', '1650')">
+          <img src="figuras/fig03.png" style="width:100%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 04: Esquema de ligação entre os componentes do dispositivo utilizando o sensor BPW34
+        </p>
+      </div>      
+      
+      
+      <h5>Explicação do funcionamento do dispositivo</h5>
+      
+      
+      <p>
+        De uma perspectiva prática, o funcionamento do dispositivo com o BPW34 é semelhante ao <a href="#LDR_funcionamento">dispositivo utilizando o LDR</a>. No entanto, existem diferenças fundamentais entre ambos os circuitos. Enquanto o LDR funciona como um resistor variável cuja resistência depende da intensidade da luz incidente sobre ele, o BPW34 opera como uma fonte de tensão, cujo valor depende diretamente da intensidade luminosa que incide sobre o sensor. Por isso, a polaridade com que o BPW34 é inserido no circuito é crucial.
+      </p>
+
+      <p>
+        A ideia é que a tensão gerada pelo BPW34 reduza a tensão aplicada sobre a resistência R3R3​. Dessa forma, é mais preciso dizer que temos duas fontes de tensão, com polaridades opostas, conectadas em série e aplicadas sobre $R_3$. Assim, quando não há luz incidindo sobre o BPW34, a tensão em $R_3$​ é máxima; por outro lado, quando a luz incide sobre o sensor, a tensão em $R_3$​ é reduzida.
+      </p>
+      
+      <p>
+        Como o efeito prático do sensor é diminuir a tensão registrada no terminal A1 do Arduino em condições de iluminação, a programação do dispositivo com o BPW34 é idêntica à utilizada com o LDR. Primeiramente, determina-se o nível de luminosidade do ambiente, que corresponde a um nível mínimo de tensão. Se for registrada uma tensão em A1 acima de 70,7% desse valor mínimo, o Arduino ativa o LED L2; caso contrário, o LED L2 é desativado. Dessa forma, o LED L2 acompanha, de forma sincronizada, o piscar do LED L1 posicionado em frente ao BPW34.
+      </p>
+      
+      <h5>Programação</h5>
+      
+      <pre class="brush: cpp;">
+        #include&lt;Wire.h&gt;
+        &lt;Adafruit_GFX.h&gt;
+        &lt;Adafruit_SSD1306.h&gt;   
+        
+        Adafruit_SSD1306 display = Adafruit_SSD1306();
+
+        void calibra();
+        //SDA --> A4
+        //SCL --> A5
+
+        int volPWM=0;
+        int valor_pot=0, maxValorLuz;
+        int pinLed=2;
+        int pinLed2=3;
+        int pinoBot=4;
+        unsigned long t1, t2, ttemp, tBpw, tBpwOld, dt = 60;
+        bool estado = false, estadoBpw = false, estadoBpwOld = false;
+        bool teste = false;
+
+        int pinoSensorLuz = A2;          	 
+        int valorLuz = 0;
+        int sitBotao = 0;
+
+        unsigned long t1Local, Dc1p, Dc2p, Dc1m, Dc2m, T1, T2;
+        unsigned long contaP1, contaM1, contaP2, contaM2;
+
+        void setup() {
+          Wire.begin();
+          display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+          display.setTextColor(WHITE);
+          display.setTextSize(1);
+          display.clearDisplay();
+        
+          Serial.begin(57600);
+          pinMode(pinLed,OUTPUT);
+          pinMode(pinLed2,OUTPUT);
+          pinMode(pinoBot, INPUT);
+          t1 = millis();
+          calibra();
+        }
+
+        void calibra(){
+          int conta, acumula;
+        
+          display.clearDisplay();
+          display.setCursor(1,1);
+          display.print("calibrando ...");
+          display.display();
+        
+          t1Local = t1;
+          maxValorLuz = 0;
+          acumula 	= 0;
+          conta   	= -3;
+
+          do{
+          t2 = millis();
+          if (t2 - t1 >= 1000){
+            t1 = t2;
+            digitalWrite(pinLed,estado);
+            estado   = !estado;
+          
+            Serial.println(maxValorLuz);	 
+            conta++;
+            if (conta > 0) acumula += maxValorLuz;
+          }
+          valorLuz  = analogRead(pinoSensorLuz);
+          //Serial.println(valorLuz);
+          if (valorLuz > maxValorLuz) maxValorLuz = valorLuz;
+          } while (millis() - t1Local < 20000);
+        
+          maxValorLuz = acumula / conta;
+          Serial.print("valor medio = ");
+          Serial.println(maxValorLuz);
+
+          display.clearDisplay();
+          display.setCursor(1,1);
+          display.print("calibracao:");
+          display.setCursor(1,10);
+          display.print("Max. val escuro = ");
+          display.print(maxValorLuz);
+        
+          maxValorLuz *= 0.7079;  //-3db --> 10^(-3.0/20.)
+          Serial.print("-3db = ");
+          Serial.println(maxValorLuz);
+
+          display.setCursor(1,20);
+          display.print("-3db = ");
+          display.print(maxValorLuz);
+          display.display();
+        }
+
+        void loop() {
+          // put your main code here, to run repeatedly:
+          //t2 = micros();
+          t2 = millis();
+          valor_pot = analogRead(A0);
+          volPWM	= map(valor_pot,0,1023,1,512);
+          if (t2 - t1 >= volPWM){
+          t1 = t2;
+          digitalWrite(pinLed,estado);
+          //Serial.println(t2, estado);
+          estado = !estado;
+          }
+        
+          valorLuz  = analogRead(pinoSensorLuz);
+          if(valorLuz>maxValorLuz)
+          {
+          digitalWrite(pinLed2,HIGH);
+          }
+          else
+          {
+          digitalWrite(pinLed2,LOW);
+          }
+          sitBotao = digitalRead(pinoBot);
+          if (sitBotao == HIGH) CalculaFeq();
+        }
+
+        void CalculaFeq(){
+        
+          display.clearDisplay();
+          display.setCursor(1,1);
+          display.print("Ajustando Freq ...");
+          display.display();
+
+          t1Local = millis();
+          do {
+          t2 = millis();
+          if (t2 - t1 >= volPWM){
+            t1 = t2;
+            digitalWrite(pinLed,estado);
+            estado = !estado;
+          }
+            
+          valorLuz  = analogRead(pinoSensorLuz);
+          if(valorLuz>maxValorLuz)  {
+            digitalWrite(pinLed2,LOW);
+            estadoBpw = true;
+          } else   {
+            digitalWrite(pinLed2,HIGH);
+            estadoBpw = false;
+          }    
+          } while (millis() - t1Local < 20000);
+        
+          tBpw	= millis();
+          tBpwOld = tBpw;
+          estadoBpwOld = estadoBpw;
+        
+          display.clearDisplay();
+          display.setCursor(3,10);
+          display.print("Calc. Freq. ...");
+          display.display();
+        
+          Dc1p = 0;
+          Dc2p = 0;
+          Dc1m = 0;
+          Dc2m = 0;
+
+          contaP1 = 0;
+          contaM1 = 0;
+          contaP2 = 0;
+          contaM2 = 0;
+
+          t1Local = t1;
+          do {
+          t2 = millis();
+          if (t2 - t1 >= volPWM){
+            ttemp = t1;
+            t1	= t2;
+            digitalWrite(pinLed,estado);
+            if (estado == true){
+              Dc1p += t2 - ttemp;
+              contaP1 += 1;
+            } else {
+              Dc1m += t2 - ttemp;
+              //Serial.println(t2 - ttemp);
+              contaM1 += 1;
+            }
+            estado = !estado;
+          }
+            
+          valorLuz  = analogRead(pinoSensorLuz);    
+            
+          if(valorLuz>maxValorLuz)  {
+            digitalWrite(pinLed2,LOW);
+            estadoBpw = false;
+          } else   {
+            digitalWrite(pinLed2,HIGH);
+            estadoBpw = true;
+          }
+
+          if (estadoBpwOld != estadoBpw){
+            tBpwOld = tBpw;
+            tBpw = millis();
+            if (estadoBpwOld) {
+              Dc2p += tBpw - tBpwOld;
+              contaP2 += 1;
+            } else{
+              Dc2m += tBpw - tBpwOld;
+              contaM2 += 1;
+            }
+            estadoBpwOld = estadoBpw;
+          }
+            
+          } while (millis() - t1Local < 20000);
+
+          Dc1p = (float) Dc1p / (float) contaP1;
+          Dc1m = (float) Dc1m / (float) contaM1;
+          T1   = Dc1p + Dc1m;
+
+          Dc2p = (float) Dc2p / (float) contaP2;
+          Dc2m = (float) Dc2m / (float) contaM2;
+          T2   = Dc2p + Dc2m;
+        
+          display.clearDisplay();
+          display.setCursor(1,1);
+          display.print("Frequencias e Duty:");
+          display.setCursor(1,10);
+          display.print("Led: ");
+          display.print(T1);
+          display.print(" ms, ");
+          display.print((int) (100.0 * (float) Dc1p / (float) T1));
+          display.print(", ");
+          display.print((int) (100.0 * (float) Dc1m / (float) T1));
+
+          display.setCursor(1,20);
+          display.print("bpw34: ");
+          display.print(T2);
+          display.print(" ms, ");
+          display.print((int) (100.0 * (float) Dc2p / (float) T2));
+          display.print(", ");
+          display.print((int) (100.0 * (float) Dc2m / (float) T2));
+        
+          display.display();
+        }
+      </pre> 
+      
+<!--      <h6><a href="exemplos/exemplo3.1.39.html" target="_blank">Exemplo 3.1.39</a></h6>
+      <p>
+        Avalie a integral
+        \[
+          I= \iint_R \sqrt{x^2 + y^2} dA
+        \]
+        onde $R$ é a região delimitada pela curvas $x^2 +y^2=2x$,  $x^2 + y^2 = 4x$, $y=x$ e e $y=\dfrac{\sqrt{3}}{3}x$.
+      </p>-->     
+      
+<!--       <script src="../../../../../../css_e_js/math07.js"></script> -->
+      
+      <!--
+            
+      <img src="../../../../../../figuras/linha_b.png">  
+      
+      
+      
+      <div style="width:100%;margin-left: auto;margin-right: auto;">
+        <div style="display: flex; padding-bottom: 0px;">
+        
+          <div style="flex: 30%; padding-right: 30px">
+            <a href="javascript:newWin('figuras/figCone02_a.png', 'Zoom', '1650')">
+              <img src="figuras/figCone02_a.png" style="width:100%">
+            </a>
+            <p style="text-align: center; font-size:80%">
+              <b>a)</b> Gráfico de $\displaystyle f(x,y)=\sqrt{x^2+y^2}$
+            </p>
+          </div>
+          
+          <div style="flex: 30%; padding-left: 30px;">
+            <a href="javascript:newWin('figuras/figCone02_b1.png', 'Zoom', '1650')">
+              <img src="figuras/figCone02_b1.png" style="width:100%">
+            </a>
+            <p style="text-align: center; font-size:80%">
+              <b>b)</b> Interseções de planos com cone
+            </p>
+          </div>
+          
+          <div style="flex: 30%; padding-left: 30px;">
+            <a href="javascript:newWin('figuras/figCone02_b2.png', 'Zoom', '1650')">
+              <img src="figuras/figCone02_b2.png" style="width:100%">
+            </a>
+            <p style="text-align: center; font-size:80%">
+              <b>c)</b> Analise do gráfico do cone $\displaystyle f(x,y)=\sqrt{x^2+y^2}$
+            </p>
+          </div>
+          
+        </div>
+      </div>
+      
+
+      
+      <figure style="margin-top:-30px">
+        <div class = "ggbContainer"> 
+          <a href="https://www.geogebra.org/material/iframe/id/dhppzd7w/width/836/height/502/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false" width="836px" height="502px" style="border:0px;" width="836px" height="502px" style="border:0px;">
+            Abrir com o<br>GeoGebra
+          </a>
+          <img src="figuras/curvasDeNivelGeo.png" width="836px" height="502px" alt="polar_coordinates" class="border" >
+          <iframe src="figuras/curvasDeNivelGeo.png" allowfullscreen width="836px" height="502px" class="hiddenIframe"></iframe>
+        </div>       
+      </figure>
+      -->
+      
+<!--
+
+
+
+
+    <h6><a href="exemplos/exemplo1.4.23.html" target="_blank">Exemplo Q1.4.23</a></h6>
+        Encontre a área do refletor parabólico cuja forma se obtém ao rotar o arco parabólico $y=x^2$, $9\leq x \leq 1$ ao redor do eixo $y$
+      <p>-->
+      
+    <!--  
+      <h6><a href="exemplos/exemplo1.4.22.html" target="_blank">Exemplo Q1.4.22</a></h6>
+      
+      <p>
+        
+      </p>    <h6><a href="exemplos/exemplo1.4.2.html" target="_blank">Exemplo Q1.4.3</a></h6>
+      
+      <p>
+        
+      </p>-->
+      
+     
+      
+<!--      <h5>Exemplo 3</h5>
+      <p>
+        Escreva a identidade de Parseval correspondente ao problema \ref{ex1.3.2}.\ref{ex397}
+      </p>-->
+<!--
+      \left( \right)   \left|\, z \,\right|  
+      
+      \left[ \right]   \left\{ \righ\}
+        
+        \begin{align*}
+        \end{align*}
+       
+      <ol>
+        <li>
+          
+        </li>
+        <li>
+          
+        </li>
+      </ol>
+        
+        \[
+          \begin{bmatrix}
+          \end{bmatrix}
+        \]
+      
+
+      <div align="center">
+        <a href="javascript:newWin('figuras/fig01.png', 'Zoom', '1650')">
+          <img src="figuras/fig01.png" width="400" align="center">
+        </a>
+          <p style="padding-left: 50px; padding-right: 50px; text-align: justify;font-size: 75%;">
+            Figura 01:  Sistema massa mola.
+          </p>
+      </div>
+      
+      
+      
+      <div style='padding: 15px; width: 425px;float:right;'>
+          <img src="figuras/Bessel32.gif" width="400" align="right">
+          <p style="padding-left: 50px; padding-right: 50px; text-align: justify;font-size: 75%;">
+            Figura 01:  Uma solução do problema da membrana vibrante a qual é dada em termos da funções de Bessel.
+          </p>
+      </div>
+      
+      <h5>Exemplo 03</h5>
+      
+      <p>
+        
+        <img src="figuras/linha_b.png">
+      </p>
+         
+      <table class="tabela_de_lista2">      
+      <tr>
+      <td class="definicaotitulo">
+        Definição de função vetorial
+      </td>
+      </tr>
+      <tr>
+      <td class="definicao">
+      <p><em>
+        
+      </em></p>
+      </td></tr>
+      </table>
+      
+      <table class="tabela_de_lista2">      
+      <tr>
+      <td class="teorematitulo">
+        Teorema
+      </td>
+      </tr>
+      <tr>
+      <td class="teorema">
+      <p><em>
+        
+      </em></p>
+      </td></tr>
+      </table>
+      
+-->
+      
+      
+      </div>
+      <!-- Fim Principal   -->      
+    </div>
+    <!-- Fim todo   -->
+  </body>
+</html>
