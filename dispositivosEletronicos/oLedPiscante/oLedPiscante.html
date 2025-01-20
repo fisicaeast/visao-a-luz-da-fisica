@@ -205,7 +205,7 @@
           Figura 02: Esquema de ligação entre os componentes do dispositivo
         </p>
       </div>
-        
+      
       <h4 id="funcionamentoPiscaLed">Explicação do funcionamento do dispositivo</h4>
       <p>
         Nesta montagem, o potenciômetro atua como um divisor de tensão. Portanto, o pino A0 do Arduino registra valores de tensão entre 0 V e 5 V. Esses valores de tensão são mapeados em 1024 possibilidades, o que resulta em uma resolução de aproximadamente 4,89 mV por intervalo. Em seguida, o Arduino converte cada intervalo de tensão em um intervalo de tempo Δt, que corresponde a aproximadamente 32 µs. Ou seja, 0V corresponde a 32 µs, e 5V correspondem a 32,768 ms. Esses valores temporais determinam o período durante o qual o Arduino mantém o LED ligado e, em seguida, o desliga durante o mesmo tempo. Portanto, o período de piscado corresponde ao dobro de Δt.

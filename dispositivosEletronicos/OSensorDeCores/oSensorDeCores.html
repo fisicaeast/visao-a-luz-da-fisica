@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+    <title>Página de Física EAST</title>
+    
+    <link type="text/css" rel="stylesheet" href="../../css/aulas.css" />   
+    <link type="text/css" rel="stylesheet" href="css_e_js/local.css" />
+
+    <link href='../../comunHtml/syntaxhighlighter/styles/shCore.css' rel='stylesheet' type='text/css' />
+    <link href='../../comunHtml/syntaxhighlighter/styles/shThemeDefault.css' rel='stylesheet' type='text/css' />
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shCore.js' type='text/javascript'></script>
+    <script src='./comunHtml/syntaxhighlighter/scripts/shAutoloader.js' type='text/javascript'></script>
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shBrushXml.js' type='text/javascript'></script>
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shBrushJScript.js' type='text/javascript'></script>
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shBrushCss.js' type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushPython.js" type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushPhp.js" type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushFortran.js" type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushCpp.js"  type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushAsm.js"  type='text/javascript'></script>
+    <script type="text/javascript">
+      SyntaxHighlighter.config.clipboardSwf = '../../comunHtml/syntaxhighlighter/scripts/clipboard.swf';https://tex.stackexchange.com/questions/58141/equations-inside-enumerate-aligned-on-items-number
+      SyntaxHighlighter.all();
+    </script>
+
+     <script>
+       window.MathJax = {
+         tex: {
+           tags: 'ams',
+           inlineMath: [['$', '$'], ['\\(', '\\)']],
+           macros: {
+              bra: ["{\\left\\langle #1 \\right\\rvert}",1],
+              ket: ["{\\left\\lvert #1 \\right\\rangle}",1],
+              braket:["{\\left\\langle #1 \\vert #2 \\right\\rangle}",2],
+              opProj:["{\\left\\lvert #1 \\right\\rangle\\left\\langle #1 \\right\\rvert}",1],
+              opUni:["{\\left\\lvert #1 \\right\\rangle\\left\\langle #1 \\right\\rvert \+ \\left\\lvert #2 \\right\\rangle\\left\\langle #2 \\right\\rvert}",2],
+              arcsec: "{\\operatorname{arcsec}}",
+              arccot: "{\\operatorname{arccot}}",
+              arccsc: "{\\operatorname{arcsc}}",
+              sech: "{\\operatorname{sech}}",
+              csch: "{\\operatorname{csch}}",
+              argsinh: "{\\operatorname{arg sinh}}",
+              argcosh: "{\\operatorname{arg cosh}}",
+              argtanh: "{\\operatorname{arg tanh}}",
+              argcoth: "{\\operatorname{arg coth}}",
+              argsech: "{\\operatorname{arg sech}}",
+              argcsch: "{\\operatorname{arg csch}}",
+              dbar: "{\\mathscr'26\\mkern-12mu \\mathrm{d}}"
+          }
+         }
+       };
+     </script>    
+
+    <script src="../../comunHtml/mathjax_new/tex-chtml.js" id="MathJax-script" async></script>
+    
+    <script type="text/javascript">
+      function newWin(url, name, width) { 
+      window.open(url,name,'scrollbars=yes,resizable=yes, width=' + width);}
+    </script>
+    
+    <script src="../../comunHtml/jquery/dist/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+      $(".expand").click(function(){
+        target_num = $(this).attr("id").split("-")[1];
+        content_id = "#expandable-".concat(target_num);
+        $(content_id).slideToggle('fast');
+      });
+    });
+    </script>
+
+    <style>
+      .expand {
+        font-style: italic;
+        font-size: 12px;
+        cursor: pointer;
+        color: blue;
+      }
+        .expandable {
+        display:none;
+        margin-left: 3%;
+        margin-right: 3%;
+        color: #3e3e3e;
+/*         text-align: justify; */
+      }
+    </style>
+    
+    <style>
+      ol.alpha_list {
+        counter-reset: item;
+        list-style: none;
+      }
+      ol.alpha_list li:before {
+        content: counter(item,  lower-latin) ")  ";
+        counter-increment: item;
+        margin-left: -30px;
+      }
+    </style>
+
+</head>
+
+  <body>
+    <div id="todo">
+
+      <div id="titulo">      
+        <div id="cabezado">
+          <h1>Visão à luz da Física</h1>
+        </div>
+
+        <div >
+          <img src="../../figuras/divisorHorizontal.png" alt="só um divisor"></img>
+        </div>
+
+
+      <!-- Inicio Principal   -->
+      <div id="principal">
+      
+      <h2>O Sensor de cores</h2>
+      
+      <p>
+        Tanto o LDR quanto o BPW34 captam luz e convertem em eletricidade em uma ampla faixa de frequências ou "cores", ainda que não respondam da mesma forma para cada uma dessas frequências. Já o sensor TCS34725 é constituído por uma matriz de 3x4 fotodiodos sobre os quais são colocados filtros de cor vermelho, verde, azul, enquanto outros são deixados sem filtro. Isso resulta em 3 fotodiodos distribuído sobre a superfície do chip.  Sobre todo esse chip é colocado um outro filtro que bloqueia a radiação infravermelha.  Internamente o chip possui 4 conversores analógicos digitais (CAD) que amplificam e converte o sinal analógico vindo de cada fotodiodo em um único sinal digital de 16 bits, conforme o "<a>Datasheet</a> desse sensor.
+      </p>
+        
+      <div  align="center">
+        <a href="javascript:newWin('figuras/fig01.png', 'Zoom', '1650')">
+          <img src="figuras/fig01.png" style="width:100%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 01: (a) Diagrama em bloco do chip TCS34725. (b) Diagrama de pinos do TCS34725 e distribuição dos filtros de cor. (c) Resposta espectral dos fotodiodos que constituem o sensor TCS34725.
+        </p>
+      </div>
+      
+      <h3>Descrição e aplicação da experiência</h3>
+      
+      <p>
+        Nesta experiência os alunos observam o funcionamento do sensor de cores TCS34725. Para isso utilizam o dispositivo mostrado na figura 02. De forma simplifica o dispositivo reproduz, através de um LED RGB colocado dentro de uma bolinha de tenis de mesa, as cores "vistas" pelo sensor TCS34725. 
+      </p>
+        
+      <div  align="center">
+        <a href="javascript:newWin('figuras/fig02.png', 'Zoom', '1650')">
+          <img src="figuras/fig02.png" style="width:100%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 02: À esquerda foto real do dispositivo experimental. À direita a representação do mesmo circuíto.
+        </p>
+      </div>
+      
+      <h3>Materiais</h3>
+      <ol>
+        <li>
+          Coloque o Arduino NANO no centro, próximo a um dos extremos da protoboard MB102.
+        </li>
+        <li>
+          No outro extremo do MB102 coloque a fonte de energia respeitando a polaridade: positivo no trilho vermelho e negativo na trilha azul.
+        </li>
+        <li>
+          Entre o Arduino e a fonte de tensão, coloque o LED RGB de 4 pinos.
+        </li>
+        <li>
+          Se está se trabalhando com um LED RGB do tipo cátodo comum, ligue o terminal (perna) mais comprido do LED ao trilho azul (negativo). Caso o RGB seja do tipo tipo ânodo comum ligue o terminal (perna) mais comprida do LED ao trilho vermelho (positivo).
+        </li>
+      </ol>
+        
+      <div  align="center">
+        <a href="javascript:newWin('figuras/fig03.png', 'Zoom', '1650')">
+          <img src="figuras/fig03.png" style="width:70%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 03: Disposição dos terminais do LED RGB ânodo comum, à esquerda, e do RGB cátodo comum, à direita (modificada do original do site <a href="https://makeabilitylab.github.io/physcomp/arduino/rgb-led.html" target="_blank">physical computing</a>).
+        </p>
+      </div>
+      
+      <ol start="5">
+        <li>
+          Identifique o outros terminais do RGB conforme a figura 03. Ligue o terminal vermelho (R) ao pino D5 através de um resistor de $R_1=1k\Omega$. Ligue o terminal verde (G) ao pino D6 através de um resistor de $R_1=560\Omega$. Ligue o terminal azul (B) ao pino D9 através de um resistor de $R_1=560\Omega$.  
+        </li>
+        <li>
+          Ligue as entradas de energia, VIN e GND, do sensor de cores TCS34725 às trilhos de energia positiva e negativo, respectivamente. Os terminais identificados como SDA e SCL do sensor de cores devem ser ligados ao pinos do Arduino A4 e A5, respectivamente
+        </li>
+      </ol>
+        
+      <div  align="center">
+        <a href="javascript:newWin('figuras/fig04.png', 'Zoom', '1650')">
+          <img src="figuras/fig04.png" style="width:90%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 04: Esquema de ligação entre os componentes do dispositivo.
+        </p>
+      </div>
+
+      
+      <h4>Explicação do funcionamento do dispositivo</h4>
+      
+      <p>
+        Este dispositivo é bastante simples de uma perspectiva geral. O sensor de cor converte a luz que incide sobre ele em uma tensão elétrica diretamente proporcional à intensidade dessa luz. Internamente, essa tensão é digitalizada por conversores analógicos digitais (ADCs) e transmitida ao Arduino utilizando o protocolo $I^2C$. O programa, por meio da biblioteca do sensor, decodifica o sinal digital e permite extrair os níveis de intensidade de cada cor.
+      </p>
+
+      <p>
+        O problema, no entanto, é que o Arduino possui um conversor analógico-digital de 8 bits, o que permite gerar apenas $2^8 = 256$ níveis de intensidade diferentes. Em contraste, os dados de saída do sensor de cor variam teoricamente de $0$ até $2^{16}=65 536$. Por isso, é necessário remapear os valores do sensor para os limites do Arduino.
+      </p>
+
+      <p>
+        Além disso, é preciso definir o que será considerado como "preto". Teoricamente, o preto deveria corresponder a $R=0$, $G=0$ e $B=0$, mas, devido a diversos efeitos espúrios, o preto real é representado por valores significativamente acima de zero. Nos testes realizados, o preto de um papel colorido apresentou valores de $R=5,6\%$, $G=5,6\%$ e $B=4,9\%$ do valor máximo, ou $R=3700$, $G=3700$ e $B=3200$ no sensor de cor.
+      </p>
+
+      <p>
+        Para lidar com isso, a leitura feita pelo sensor deve ser reescalada conforme a seguinte equação:
+        \[
+          LED_C = \left(\dfrac{TSC_C - TSC_{Preto}}{TSC_{Branco} - TSC_{Preto}}\right)\, 255
+        \]
+        onde:
+        <ul>
+          <li>
+            $LED_C$: tensão aplicada aos terminais do LED RGB de dada cor;
+          </li>
+          <li>
+            $TSC_C$: "intensidade" da cor lida pelo sensor TCS34725;
+          </li>
+          <li>
+            $TSC_{Preto}$: valor do preto medido durante a calibração;
+          </li>
+          <li>
+            $TSC_{Branco}$: valor do branco medido pelo sensor de cor
+          </li>
+        </ul>
+      </p>
+
+      <p>
+        Além do reescalamento, é necessário aplicar um ajuste para compensar a percepção humana da intensidade luminosa. Como discutido <a href="https://en.wikipedia.org/wiki/Gamma_correction" target="_blank">wikipedia</a> e nos sites <a href="https://www.cambridgeincolour.com/tutorials/gamma-correction.htm" target="_blank">Cambridge in color</a>, <a href="https://www.instructables.com/TCS3472-RGB-Light-Color-Sensor-With-Arduino/" target="_blank">www.instructables.com</a> e <a href="https://www.luisllamas.es/en/arduino-rgb-color-sensor-tcs34725/" target="_blank">https://www.luisllamas.es/en/arduino-rgb-color-sensor-tcs34725/</a>, os olhos humanos absorvem luz de baixa intensidade de maneira mais eficiente do que luz de alta intensidade. Assim, se o Arduino reproduzisse diretamente os valores captados pelo sensor de cor, o resultado seria uma sensação de cor diferente da percebida no objeto original.
+      </p>
+        
+      <p>
+        Essa compensação é obtida aplicando a seguinte equação aos valores calculados para cada terminal do LED:
+        \[
+          LED_{SC} = \left(\dfrac{LED_C}{255}\right)^{2,5}\, 255
+        \]
+        onde o expoente 2,5 é ajustável, geralmente variando entre 1,8 e 2,6.
+      </p>
+      
+      <h4>Programação</h4>
+      
+      <p>
+        A versão apresentada neste site defere ligeiramente do utilizado no estudo original, principalmente na parte de referente à definição do nível de preto e branco do ambiente.
+      </p>
+      
+      <pre class="brush: cpp;">
+        #include&lt;Wire.h&gt;
+        #include "Adafruit_TCS34725.h"
+
+        const int pinoVermelho = 9;
+        const int pinoVerde = 10;
+        const int pinoAzul = 11;
+
+        // vetor que representa a função gamma
+        int gammatable[256];
+
+        // Initaliza um object do tipo 'tcs" com tempo de integration 600 ms and ganho 16X
+        Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_600MS, TCS34725_GAIN_16X);
+
+        // Define uma estrutura C++ stucture para armazenar o resutda da calibração de preto / branco
+        struct calibracaoDeCor {
+          unsigned int pretoPadrao;
+          unsigned int brancoPadrao;
+        };
+
+        // inicializa três estruturas C++ para guardar a calibração d vermelho, verde e azul
+        calibracaoDeCor vermelhoCalibra, verdeCalibra, azulCalibra;
+
+
+        void setup() {
+          Serial.begin(115200);
+          Serial.println("Color Swatch to RGB LED");
+
+          // Initializa TCS3472
+          if (tcs.begin()) {
+            Serial.println("Found TCS3472 sensor");
+          } 
+          else {
+            Serial.println("No TCS34725 found ... check your connections");
+            while (1); // halt!
+          }
+
+          // Estos valores resulta da calibração do sensor TCS3472 a partir de uma amostra de preto e de branco
+          vermelhoCalibra.pretoPadrao  = 1525;
+          vermelhoCalibra.brancoPadrao = 9078;
+          verdeCalibra.pretoPadrao     = 1851;
+          verdeCalibra.brancoPadrao    = 13787;
+          azulCalibra.pretoPadrao      = 1847;
+          azulCalibra.brancoPadrao     = 14972;
+
+          // define os três pinos do LED RGB
+          pinMode(pinoVermelho, OUTPUT);
+          pinMode(pinoVerde, OUTPUT);
+          pinMode(pinoAzul, OUTPUT);
+
+          // Define a função Gamma como Out = In^2.5
+          // Necessário para a correção da visão humana
+          // Armazenado em um vetor
+          // normalizado entre 0 a 255
+          for (int i=0; i<256; i++) {
+            float x = i;
+            x /= 255;
+            x = pow(x, 2.5);
+            x *= 255;
+
+            gammatable[i] = int(x);
+            }
+            
+          Serial.println("Type any character into Serial Monitor to begin");  
+        }
+
+
+        void loop() {
+          unsigned int r, g, b, c; // saída crua dos valores das cores r,g,b,c lidas pelo sensor TCS3472
+          // Variáveis usadas para armazenar os valores RGB que estão entre 0 e 255
+          int redValue;
+          int greenValue;
+          int blueValue;
+          int clearValue;
+
+          delay(500);
+
+          
+          // leitura pura dos dados do sensor TCS3472
+          tcs.getRawData(&r, &g, &b, &c);
+            
+          // Imprimer os valores puros lidos elo sensor TCS3472
+          Serial.print("R: "); Serial.print(r); Serial.print(" ");
+          Serial.print("G: "); Serial.print(g); Serial.print(" ");
+          Serial.print("B: "); Serial.print(b); Serial.print(" ");
+          Serial.print("C: "); Serial.print(c); Serial.print(" ");
+          Serial.println(" ");
+
+          delay(50);
+
+          // Mapeia os valores crus do TCS3472 em valores entre 0 and 255
+          redValue = RGBmap(r, vermelhoCalibra.pretoPadrao, vermelhoCalibra.brancoPadrao, 0, 255);
+          greenValue = RGBmap(g, verdeCalibra.pretoPadrao, verdeCalibra.brancoPadrao, 0, 255);
+          blueValue = RGBmap(b, azulCalibra.pretoPadrao, azulCalibra.brancoPadrao, 0, 255);
+
+          // Imprime os valores de saída
+          Serial.print("R: "); Serial.print(redValue); Serial.print(" ");
+          Serial.print("G: "); Serial.print(greenValue); Serial.print(" ");
+          Serial.print("B: "); Serial.print(blueValue); Serial.print(" ");
+          Serial.println(" ");
+
+          // Envia os valores ao pinos do LED RGB após a aplicação da função gamma
+          analogWrite(pinoVermelho, gammatable[redValue]);
+          analogWrite(pinoVerde, gammatable[greenValue]);
+          analogWrite(pinoAzul, gammatable[blueValue]);
+
+          }
+          
+        }
+        
+        // Function que mapeia a leitura crua dos valores TCS3472 a valores entre 0 to 255
+        int RGBmap(unsigned int valorCruDaCor, unsigned int valorReferenciaPreto, unsigned int valorReferenciaBranco, int valorLedRgbPreto, int valorLedRgbBranco){
+          float fCor          = float(valorCruDaCor);
+          float fPretoRGB     = float(valorLedRgbPreto);
+          float fBrancoRGB    = float(valorLedRgbBranco);
+          float fPretoSensor  = float(valorReferenciaPreto);
+          float fBrancoSensor = float(valorReferenciaBranco);
+
+          float res = ((fCor - fPretoSensor)/(fBrancoSensor - fPretoSensor))*(fBrancoRGB - fPretoRGB) + fPretoRGB;
+
+          return int(res);
+        }
+      </pre>
+
+
+<!--      <h6><a href="exemplos/exemplo3.1.39.html" target="_blank">Exemplo 3.1.39</a></h6>
+      <p>
+        Avalie a integral
+        \[
+          I= \iint_R \sqrt{x^2 + y^2} dA
+        \]
+        onde $R$ é a região delimitada pela curvas $x^2 +y^2=2x$,  $x^2 + y^2 = 4x$, $y=x$ e e $y=\dfrac{\sqrt{3}}{3}x$.
+      </p>-->     
+      
+<!--       <script src="../../../../../../css_e_js/math07.js"></script> -->
+      
+      <!--
+            
+      <img src="../../../../../../figuras/linha_b.png">  
+      
+      
+      
+      <div style="width:100%;margin-left: auto;margin-right: auto;">
+        <div style="display: flex; padding-bottom: 0px;">
+        
+          <div style="flex: 30%; padding-right: 30px">
+            <a href="javascript:newWin('figuras/figCone02_a.png', 'Zoom', '1650')">
+              <img src="figuras/figCone02_a.png" style="width:100%">
+            </a>
+            <p style="text-align: center; font-size:80%">
+              <b>a)</b> Gráfico de $\displaystyle f(x,y)=\sqrt{x^2+y^2}$
+            </p>
+          </div>
+          
+          <div style="flex: 30%; padding-left: 30px;">
+            <a href="javascript:newWin('figuras/figCone02_b1.png', 'Zoom', '1650')">
+              <img src="figuras/figCone02_b1.png" style="width:100%">
+            </a>
+            <p style="text-align: center; font-size:80%">
+              <b>b)</b> Interseções de planos com cone
+            </p>
+          </div>
+          
+          <div style="flex: 30%; padding-left: 30px;">
+            <a href="javascript:newWin('figuras/figCone02_b2.png', 'Zoom', '1650')">
+              <img src="figuras/figCone02_b2.png" style="width:100%">
+            </a>
+            <p style="text-align: center; font-size:80%">
+              <b>c)</b> Analise do gráfico do cone $\displaystyle f(x,y)=\sqrt{x^2+y^2}$
+            </p>
+          </div>
+          
+        </div>
+      </div>
+      
+
+      
+      <figure style="margin-top:-30px">
+        <div class = "ggbContainer"> 
+          <a href="https://www.geogebra.org/material/iframe/id/dhppzd7w/width/836/height/502/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false" width="836px" height="502px" style="border:0px;" width="836px" height="502px" style="border:0px;">
+            Abrir com o<br>GeoGebra
+          </a>
+          <img src="figuras/curvasDeNivelGeo.png" width="836px" height="502px" alt="polar_coordinates" class="border" >
+          <iframe src="figuras/curvasDeNivelGeo.png" allowfullscreen width="836px" height="502px" class="hiddenIframe"></iframe>
+        </div>       
+      </figure>
+      -->
+      
+<!--
+
+
+
+
+    <h6><a href="exemplos/exemplo1.4.23.html" target="_blank">Exemplo Q1.4.23</a></h6>
+        Encontre a área do refletor parabólico cuja forma se obtém ao rotar o arco parabólico $y=x^2$, $9\leq x \leq 1$ ao redor do eixo $y$
+      <p>-->
+      
+    <!--  
+      <h6><a href="exemplos/exemplo1.4.22.html" target="_blank">Exemplo Q1.4.22</a></h6>
+      
+      <p>
+        
+      </p>    <h6><a href="exemplos/exemplo1.4.2.html" target="_blank">Exemplo Q1.4.3</a></h6>
+      
+      <p>
+        
+      </p>-->
+      
+     
+      
+<!--      <h5>Exemplo 3</h5>
+      <p>
+        Escreva a identidade de Parseval correspondente ao problema \ref{ex1.3.2}.\ref{ex397}
+      </p>-->
+<!--
+      \left( \right)   \left|\, z \,\right|  
+      
+      \left[ \right]   \left\{ \righ\}
+        
+        \begin{align*}
+        \end{align*}
+       
+      <ol>
+        <li>
+          
+        </li>
+        <li>
+          
+        </li>
+      </ol>
+        
+        \[
+          \begin{bmatrix}
+          \end{bmatrix}
+        \]
+      
+
+      <div align="center">
+        <a href="javascript:newWin('figuras/fig01.png', 'Zoom', '1650')">
+          <img src="figuras/fig01.png" width="400" align="center">
+        </a>
+          <p style="padding-left: 50px; padding-right: 50px; text-align: justify;font-size: 75%;">
+            Figura 01:  Sistema massa mola.
+          </p>
+      </div>
+      
+      
+      
+      <div style='padding: 15px; width: 425px;float:right;'>
+          <img src="figuras/Bessel32.gif" width="400" align="right">
+          <p style="padding-left: 50px; padding-right: 50px; text-align: justify;font-size: 75%;">
+            Figura 01:  Uma solução do problema da membrana vibrante a qual é dada em termos da funções de Bessel.
+          </p>
+      </div>
+      
+      <h5>Exemplo 03</h5>
+      
+      <p>
+        
+        <img src="figuras/linha_b.png">
+      </p>
+         
+      <table class="tabela_de_lista2">      
+      <tr>
+      <td class="definicaotitulo">
+        Definição de função vetorial
+      </td>
+      </tr>
+      <tr>
+      <td class="definicao">
+      <p><em>
+        
+      </em></p>
+      </td></tr>
+      </table>
+      
+      <table class="tabela_de_lista2">      
+      <tr>
+      <td class="teorematitulo">
+        Teorema
+      </td>
+      </tr>
+      <tr>
+      <td class="teorema">
+      <p><em>
+        
+      </em></p>
+      </td></tr>
+      </table>
+      
+-->
+      
+      
+      </div>
+      <!-- Fim Principal   -->      
+    </div>
+    <!-- Fim todo   -->
+  </body>
+</html>
