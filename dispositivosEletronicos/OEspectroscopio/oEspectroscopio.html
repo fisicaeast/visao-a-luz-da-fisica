@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+    <title>Página de Física EAST</title>
+    
+    <link type="text/css" rel="stylesheet" href="../../css/aulas.css" />   
+    <link type="text/css" rel="stylesheet" href="css_e_js/local.css" />
+
+    <link href='../../comunHtml/syntaxhighlighter/styles/shCore.css' rel='stylesheet' type='text/css' />
+    <link href='../../comunHtml/syntaxhighlighter/styles/shThemeDefault.css' rel='stylesheet' type='text/css' />
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shCore.js' type='text/javascript'></script>
+    <script src='./comunHtml/syntaxhighlighter/scripts/shAutoloader.js' type='text/javascript'></script>
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shBrushXml.js' type='text/javascript'></script>
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shBrushJScript.js' type='text/javascript'></script>
+    <script src='../../comunHtml/syntaxhighlighter/scripts/shBrushCss.js' type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushPython.js" type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushPhp.js" type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushFortran.js" type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushCpp.js"  type='text/javascript'></script>
+    <script src="../../comunHtml/syntaxhighlighter/scripts/shBrushAsm.js"  type='text/javascript'></script>
+    <script type="text/javascript">
+      SyntaxHighlighter.config.clipboardSwf = '../../comunHtml/syntaxhighlighter/scripts/clipboard.swf';https://tex.stackexchange.com/questions/58141/equations-inside-enumerate-aligned-on-items-number
+      SyntaxHighlighter.all();
+    </script>
+
+     <script>
+       window.MathJax = {
+         tex: {
+           tags: 'ams',
+           inlineMath: [['$', '$'], ['\\(', '\\)']],
+           macros: {
+              bra: ["{\\left\\langle #1 \\right\\rvert}",1],
+              ket: ["{\\left\\lvert #1 \\right\\rangle}",1],
+              braket:["{\\left\\langle #1 \\vert #2 \\right\\rangle}",2],
+              opProj:["{\\left\\lvert #1 \\right\\rangle\\left\\langle #1 \\right\\rvert}",1],
+              opUni:["{\\left\\lvert #1 \\right\\rangle\\left\\langle #1 \\right\\rvert \+ \\left\\lvert #2 \\right\\rangle\\left\\langle #2 \\right\\rvert}",2],
+              arcsec: "{\\operatorname{arcsec}}",
+              arccot: "{\\operatorname{arccot}}",
+              arccsc: "{\\operatorname{arcsc}}",
+              sech: "{\\operatorname{sech}}",
+              csch: "{\\operatorname{csch}}",
+              argsinh: "{\\operatorname{arg sinh}}",
+              argcosh: "{\\operatorname{arg cosh}}",
+              argtanh: "{\\operatorname{arg tanh}}",
+              argcoth: "{\\operatorname{arg coth}}",
+              argsech: "{\\operatorname{arg sech}}",
+              argcsch: "{\\operatorname{arg csch}}",
+              dbar: "{\\mathscr'26\\mkern-12mu \\mathrm{d}}"
+          }
+         }
+       };
+     </script>    
+
+    <script src="../../comunHtml/mathjax_new/tex-chtml.js" id="MathJax-script" async></script>
+    
+    <script type="text/javascript">
+      function newWin(url, name, width) { 
+      window.open(url,name,'scrollbars=yes,resizable=yes, width=' + width);}
+    </script>
+    
+    <script src="../../comunHtml/jquery/dist/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+      $(".expand").click(function(){
+        target_num = $(this).attr("id").split("-")[1];
+        content_id = "#expandable-".concat(target_num);
+        $(content_id).slideToggle('fast');
+      });
+    });
+    </script>
+
+    <style>
+      .expand {
+        font-style: italic;
+        font-size: 12px;
+        cursor: pointer;
+        color: blue;
+      }
+        .expandable {
+        display:none;
+        margin-left: 3%;
+        margin-right: 3%;
+        color: #3e3e3e;
+/*         text-align: justify; */
+      }
+    </style>
+    
+    <style>
+      ol.alpha_list {
+        counter-reset: item;
+        list-style: none;
+      }
+      ol.alpha_list li:before {
+        content: counter(item,  lower-latin) ")  ";
+        counter-increment: item;
+        margin-left: -30px;
+      }
+    </style>
+
+</head>
+
+  <body>
+    <div id="todo">
+
+      <div id="titulo">      
+        <div id="cabezado">
+          <h1>Visão à luz da Física</h1>
+        </div>
+
+        <div >
+          <img src="../../figuras/divisorHorizontal.png" alt="só um divisor"></img>
+        </div>
+
+
+      <!-- Inicio Principal   -->
+      <div id="principal">
+      
+      <h2>O espectroscópio</h2>
+      
+      <p>
+        Para entender o funcionamento do LED como sensor de luz é necessário analisar os espectros de emissão/absorção desses LED. Para isso, propomos ao alunos a construção de um espectroscópio utilizando como base a proposta da <a href="https://publiclab.org/notes/abdul/10-19-2016/foldable-paper-spectrometer-instructions" target="_blank">publiclab.org</a>.
+      </p>
+      
+      <h3>Materiais</h3>
+      
+      <ul>
+        <li>
+          Caixinha de creme dental
+        </li>
+        <li>
+          CD - disco compacto
+        </li>
+        <li>
+          Régua
+        </li>
+        <li>
+          Tesoura sem ponta
+        </li>
+        <li>
+          Fita adesiva
+        </li>
+        <li>
+          Fita isolante preta
+        </li>
+        <li>
+          Estilete ou lamina de barbear
+        </li>
+      </ul>
+      
+      <h3>Montage do espectroscópio</h3>
+      
+      <p>
+        A construção segue as indicações encontradas no <a href="https://publiclab.org/notes/abdul/10-19-2016/foldable-paper-spectrometer-instructions" target="_blank">site da publiclab</a>
+      </p>
+      
+      <ol>
+        <li>
+          Obtenha a lente difrativa do espectroscópio a partir de um CD
+          <ol>
+            <li>
+              Cubra o lado de cima do CD com fita adesiva
+            </li>
+            <li>
+              Corte o CD em 7 partes      
+              <div style="flex: 30%; padding-right: 30px">
+                <img src="figuras/fig01.png" style="width:15%">
+              </div>
+            </li>
+            <li>
+              Descole a fita adesiva para remover a película de proteção    
+              <div style="flex: 30%; padding-right: 30px">
+                <img src="figuras/fig02.png" style="width:18%">
+              </div>
+            </li>
+          </ol>
+        </li>
+        <li>
+          Montagem da estrutura do espectroscópio a partir de um caixa de creme dental
+          <ol>
+            <li>
+              Cortes das abas laterais de um tampas   
+              <div style="flex: 30%; padding-right: 30px">
+                <img src="figuras/fig03.png" style="width:60%">
+              </div>
+            </li>
+            <li>
+              Corte pela metade a aba superior e a inferior da mesma tampa
+            </li>
+            <li>
+              Colar fita isolante em toda a caixa, deixando apenas uma pequena fenda
+              <div style="flex: 30%; padding-right: 30px">
+                <img src="figuras/fig04.png" style="width:30%">
+              </div>
+            </li>
+          </ol>
+        </li>
+        <li>
+          Adição da lente difrativa à estrutura do espectroscópio
+          <ol>
+            <li>
+              Corte a tampa e ambas as abas de um lado da caixa 
+            </li>
+            <li>
+              Faça a medição da lente difrativa e corte-a de acordo com a abertura da caixa
+              <div style="flex: 30%; padding-right: 30px">
+                <img src="figuras/fig05.png" style="width:50%">
+              </div>
+            </li>
+            <li>
+              Cole a fita isolante na lente difrativa como se mostra na figura abaixo
+            </li>
+            <li>
+              Cole a lente difrativa na caixa com o cuidado de colocar nova fita isolante nas frestas 
+              <div style="flex: 30%; padding-right: 30px">
+                <img src="figuras/fig06.png" style="width:20%">
+              </div>
+            </li>
+              Cubra toda a caixa com fita isolante
+              <div style="flex: 30%; padding-right: 30px">
+                <img src="figuras/fig07.png" style="width:60%">
+              </div>
+          </ol>
+      </ol>
+      
+      
+      <h3>Aplicação 01</h3>
+      
+      <p>
+        Observe diferentes fontes de luz colocando a parte do espectroscópio com o pedaço de CD próximo a um dos olhos e o extremo com a fenda na direção da fonte de luz.
+      </p>
+      
+      <p>
+        Como fonte de luz pode ser utilizados:
+        <ul>
+          <li>
+            Sol, de forma indireta
+          </li>
+          <li>
+            Lâmpada incandescente
+          </li>
+          <li>
+            Lâmpada Fluorescente
+          </li>
+          <li>
+            LEDs coloridos: vermelho, laranja, amarelo, verde, azul, rosa, roxo 
+          </li>
+        </ul>
+      </p>
+      
+      <h3>Aplicação 02</h3>
+      
+      <p>
+        Cole o espectroscópio à lente da câmera de um celular utilizando fita adesiva, permitindo a captura fotográfica dos espectros gerados por diferentes fontes de luz previamente analisadas.
+      </p>
+      
+      <p>
+        Após a captura, é necessário analisar o espectro fotografado, construindo uma curva de frequência versus intensidade (ou comprimento de onda vs intensidade, conforme a calibração). 
+      </p>
+      
+      <p>
+        Em nosso trabalho, utilizamos originalmente o software de espectroscopia disponibilizado pela Public Lab. Contudo, devido à indisponibilidade temporária do site da plataforma, recomendamos como alternativa o software Theremino, que oferece funcionalidades similares (e até mais avançadas).
+      </p>
+      
+      <p>
+        O site da Theremino disponibiliza diversos recursos gratuitos de hardware e software para projetos científicos, incluindo:
+        <ul>
+          <li>
+            Um guia detalhado para construção de um <a href="https://www.theremino.com/pt/downloads/automation" target="_blank"> Espectrômetro de Theremino</a>, cujo design é semelhante ao proposto pela Public Lab;
+          </li>
+          <li>
+            <a href="https://www.theremino.com/wp-content/uploads/files/Theremino_Spectrometer_V4.0.zip"  target="_blank">Softwares especializados para análise espectral</a>, que permitem processar dados de intensidade luminosa em função da frequência/comprimento de onda;
+          </li>
+          <li>
+            Tutoriais para calibração e interpretação de espectros.
+          </li>
+        </ul>
+        O principal diferencial do software da Public Lab em relação ao da Theremino é que o primeiro era uma plataforma baseada na web, tornando-se independente do sistema operacional. Já o software da Theremino requer instalação e está disponível apenas para Windows.
+      </p>
+      
+      <p>
+        Independentemente do software utilizado, é indispensável realizar a calibração do sistema. Para isso, recomenda-se o uso de uma lâmpada fluorescente, cuja composição inclui vapor de mercúrio. Esse elemento emite duas linhas espectrais bem características:436 nm (faixa do azul) e 546 nm (faixa do verde)
+      </p>
+      
+      <p>
+        Essas linhas servem como referência para que o software estabeleça uma relação de proporcionalidade no eixo dos comprimentos de onda, permitindo a atribuição de valores numéricos precisos às bandas espectrais de outras fontes luminosas analisadas.
+      </p>
+      
+<!--      <h6><a href="exemplos/exemplo3.1.39.html" target="_blank">Exemplo 3.1.39</a></h6>
+      <p>
+        Avalie a integral
+        \[
+          I= \iint_R \sqrt{x^2 + y^2} dA
+        \]
+        onde $R$ é a região delimitada pela curvas $x^2 +y^2=2x$,  $x^2 + y^2 = 4x$, $y=x$ e e $y=\dfrac{\sqrt{3}}{3}x$.
+      </p>-->     
+      
+<!--       <script src="../../../../../../css_e_js/math07.js"></script> -->
+      
+      <!--
+            
+      <img src="../../../../../../figuras/linha_b.png">  
+      
+      
+      
+      <div style="width:100%;margin-left: auto;margin-right: auto;">
+        <div style="display: flex; padding-bottom: 0px;">
+        
+          <div style="flex: 30%; padding-right: 30px">
+            <a href="javascript:newWin('figuras/figCone02_a.png', 'Zoom', '1650')">
+              <img src="figuras/figCone02_a.png" style="width:100%">
+            </a>
+            <p style="text-align: center; font-size:80%">
+              <b>a)</b> Gráfico de $\displaystyle f(x,y)=\sqrt{x^2+y^2}$
+            </p>
+          </div>
+          
+          <div style="flex: 30%; padding-left: 30px;">
+            <a href="javascript:newWin('figuras/figCone02_b1.png', 'Zoom', '1650')">
+              <img src="figuras/figCone02_b1.png" style="width:100%">
+            </a>
+            <p style="text-align: center; font-size:80%">
+              <b>b)</b> Interseções de planos com cone
+            </p>
+          </div>
+          
+          <div style="flex: 30%; padding-left: 30px;">
+            <a href="javascript:newWin('figuras/figCone02_b2.png', 'Zoom', '1650')">
+              <img src="figuras/figCone02_b2.png" style="width:100%">
+            </a>
+            <p style="text-align: center; font-size:80%">
+              <b>c)</b> Analise do gráfico do cone $\displaystyle f(x,y)=\sqrt{x^2+y^2}$
+            </p>
+          </div>
+          
+        </div>
+      </div>
+      
+
+      
+      <figure style="margin-top:-30px">
+        <div class = "ggbContainer"> 
+          <a href="https://www.geogebra.org/material/iframe/id/dhppzd7w/width/836/height/502/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false" width="836px" height="502px" style="border:0px;" width="836px" height="502px" style="border:0px;">
+            Abrir com o<br>GeoGebra
+          </a>
+          <img src="figuras/curvasDeNivelGeo.png" width="836px" height="502px" alt="polar_coordinates" class="border" >
+          <iframe src="figuras/curvasDeNivelGeo.png" allowfullscreen width="836px" height="502px" class="hiddenIframe"></iframe>
+        </div>       
+      </figure>
+      -->
+      
+<!--
+
+
+
+
+    <h6><a href="exemplos/exemplo1.4.23.html" target="_blank">Exemplo Q1.4.23</a></h6>
+        Encontre a área do refletor parabólico cuja forma se obtém ao rotar o arco parabólico $y=x^2$, $9\leq x \leq 1$ ao redor do eixo $y$
+      <p>-->
+      
+    <!--  
+      <h6><a href="exemplos/exemplo1.4.22.html" target="_blank">Exemplo Q1.4.22</a></h6>
+      
+      <p>
+        
+      </p>    <h6><a href="exemplos/exemplo1.4.2.html" target="_blank">Exemplo Q1.4.3</a></h6>
+      
+      <p>
+        
+      </p>-->
+      
+     
+      
+<!--      <h5>Exemplo 3</h5>
+      <p>
+        Escreva a identidade de Parseval correspondente ao problema \ref{ex1.3.2}.\ref{ex397}
+      </p>-->
+<!--
+      \left( \right)   \left|\, z \,\right|  
+      
+      \left[ \right]   \left\{ \righ\}
+        
+        \begin{align*}
+        \end{align*}
+       
+      <ol>
+        <li>
+          
+        </li>
+        <li>
+          
+        </li>
+      </ol>
+        
+        \[
+          \begin{bmatrix}
+          \end{bmatrix}
+        \]
+      
+
+      <div align="center">
+        <a href="javascript:newWin('figuras/fig01.png', 'Zoom', '1650')">
+          <img src="figuras/fig01.png" width="400" align="center">
+        </a>
+          <p style="padding-left: 50px; padding-right: 50px; text-align: justify;font-size: 75%;">
+            Figura 01:  Sistema massa mola.
+          </p>
+      </div>
+      
+      
+      
+      <div style='padding: 15px; width: 425px;float:right;'>
+          <img src="figuras/Bessel32.gif" width="400" align="right">
+          <p style="padding-left: 50px; padding-right: 50px; text-align: justify;font-size: 75%;">
+            Figura 01:  Uma solução do problema da membrana vibrante a qual é dada em termos da funções de Bessel.
+          </p>
+      </div>
+      
+      <h5>Exemplo 03</h5>
+      
+      <p>
+        
+        <img src="figuras/linha_b.png">
+      </p>
+         
+      <table class="tabela_de_lista2">      
+      <tr>
+      <td class="definicaotitulo">
+        Definição de função vetorial
+      </td>
+      </tr>
+      <tr>
+      <td class="definicao">
+      <p><em>
+        
+      </em></p>
+      </td></tr>
+      </table>
+      
+      <table class="tabela_de_lista2">      
+      <tr>
+      <td class="teorematitulo">
+        Teorema
+      </td>
+      </tr>
+      <tr>
+      <td class="teorema">
+      <p><em>
+        
+      </em></p>
+      </td></tr>
+      </table>
+      
+-->
+      
+      
+      </div>
+      <!-- Fim Principal   -->      
+    </div>
+    <!-- Fim todo   -->
+  </body>
+</html>
