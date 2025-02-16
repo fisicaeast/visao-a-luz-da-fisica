@@ -121,18 +121,154 @@
       <p>
         Com o auxílio do dispositivo que descreveremos a seguir, será possível discutir com os alunos como a informação pode ser transmitida utilizando luz. Para isso, será proposta uma forma simples de codificação da informação, que permitirá apresentar as ideias básicas relacionadas aos protocolos de comunicação.
       </p>
+      
+      <p>
+        O dispositivo experimental utilizado foi constituído por duas partes: um emissor de luz laser pulsada, onde se codifica e transmite a informação, e um receptor de luz, que decodifica a informação e executa uma ação. No caso do receptor forma utilizado duas versões, uma com o sensor LDR e outra com o sensor BPW34
+      </p>
         
       <div  align="center">
         <a href="javascript:newWin('figuras/fig01.png', 'Zoom', '1650')">
-          <img src="figuras/fig01.png" style="width:70%">
+          <img src="figuras/fig01.png" style="width:80%">
         </a>
-        <p style="text-align: center; font-size:80%">
-          Figura 01: O sensor é colocado em contato direto ao LED $L1$. A informação captada por esse sensor é traduzida pelo Arduino e resulta no acionamento do LED $L2$
+        <p style="text-align: center; font-size:70%">
+          Figura 01: À esquerda emissão de pulsos laser, à direita o receptor.
         </p>
       </div>
       
+      <h3>Aplicação</h3>
+      
       <p>
-        O dispositivo experimental utilizado foi constituído por duas partes: um emissor de luz laser pulsada, onde se codifica e transmite a informação, e um receptor de luz, que decodifica a informação e executa uma ação.
+        Para utilizar o dispositivo, siga os seguintes passos:
+        <ol>
+          <li>
+            Ligar o Receptor
+            <ol>
+              <li>
+                Conecte o Receptor à fonte de alimentação. Se o Arduino já estiver energizado, isso equivale a apertar o botão de reset.
+              </li>
+              <li>
+                O Receptor realizará leituras do sensor da luz do ambiente durante 10 segundos para calcular um valor médio de referência que será usado para distinguir o feixe do laser da luz do ambiente.
+              </li>
+            </ol>
+          </li>
+          <li>
+            Calibração Inicial do Receptor
+            <ol>
+              <li>
+                Após a medição da luz ambiente, o display do Receptor exibirá a mensagem "Aperte o botão amarelo para calibrar".
+              </li>
+              <li>
+                Quando o laser estiver pronto para emitir, aperte o botão amarelo no Receptor para que ele entre em modo de calibração, onde:
+                <ol>
+                  <li>O Receptor monitora as transições do sinal do laser.</li>
+                  <li>
+                    As medidas são realizadas até que o sensor não registre variações por mais de 500 ms.
+                  </li>
+                  <li>
+                    Após esse período de inatividade, o Receptor calcula a frequência e o duty cycle (D+ e D-) do sinal (tempo que fica ligado e tempo que fica desligado) e exibe os resultados no display e no Serial; por fim, pisca o LED branco cálido imitando a frequência medida.
+                  </li>
+                  <li>
+                    Se a frequência medida for muito alta (por exemplo, T = 0), o receptor imprimirá no OLED que a frequência deve ser reajustada para um valor menor e que o botão amarelo seja pressionado novamente.
+                  </li>
+                </ol>
+              </li>
+            </ol>
+          </li>
+          <li>
+            Ligar o Emissor
+            <ol>
+              <li>
+                Conecte o Emissor à fonte de alimentação.
+              </li>
+              <li>
+                Logo após ligar, o Emissor entra no estado de ajuste de período, para isso deve seguir-se os seguintes passos:
+                <ol>
+                  <li>
+                    Gire o potenciômetro para alterar o período do laser, sendo possível obter pulsos com &Delta;T de 1 a 132 ms.
+                  </li>
+                  <li>
+                    O display mostra o período de oscilação (o dobro do tempo de cada pulso do laser).
+                  </li>
+                  <li>
+                    Concluído o ajuste, aperte o botão amarelo no Emissor para confirmar o período. Em seguida, o Emissor exibirá "Ligue o receptor" e aguardará 5 segundos antes de ligar o laser.
+                  </li>
+                </ol>
+              </li>
+            </ol>
+          </li>
+          <li>
+            Calibração do Emissor
+            <ol>
+              <li>
+                Após a pausa de 5 segundos, o Emissor emitirá os pulsos do laser, piscando o LED branco quente em sincronia com o laser por 20 segundos.
+              </li>
+              <li>
+                Se necessário, repita a calibração pressionando novamente o botão amarelo para acessar a função de calibração.
+              </li>
+            </ol>
+          </li>
+          <li>
+            Sincronização da Calibração no Receptor
+            <ol>
+              <li>
+                Caso o Receptor ainda não tenha lido a frequência ou se você desejar recalibrá-lo, aperte o botão amarelo no Receptor enquanto o Emissor estiver emitindo seus pulsos de calibração.
+              </li>
+              <li>
+                O Receptor monitorará as transições do laser até detectar 500 ms sem variações. Seguidamente, serão realizados os cálculos e exibidos os resultados (período T, duty cycle D+ e D-) no display.
+              </li>
+            </ol>
+          </li>
+          <li>
+            Emissão de Pulsos Coloridos
+            <ol>
+              <li>
+                Após as calibrações, o Emissor passa para o estado de espera, imprimindo no display a mensagem "Calibração concluída. Aperte algum botão".
+              </li>
+              <li>
+                O usuário pode voltar ao estado de ajuste da frequência do laser ou escolher apertar algum dos botões coloridos, cada botão desses emitirá uma quantidade específica de pulsos:
+                <ol>
+                  <li>Vermelho: emite T1 pulsos.</li>
+                  <li>Verde: emite T2 pulsos.</li>
+                  <li>Azul: emite T3 pulsos.</li>
+                </ol>
+              </li>
+              <li>
+                Cálculo dos Pulsos: O número desses pulsos é calculado conforme:
+                <ol>
+                  <li>\( T0 = \dfrac{2000}{\Delta T} \)</li>
+                  <li>\( T1 = 0,95 \times T0 \)</li>
+                  <li>\( T2 = 0,95 \times \left(2 \times T0\right) \)</li>
+                  <li>\( T3 = 0,95 \times \left(3 \times T0\right) \)</li>
+                </ol>
+                sendo &Delta;T a metade do período do laser. O fator de 0,95 leva em consideração o fato de que o &Delta;T calculado no emissor não é exatamente igual ao &Delta;T detectado no receptor, existindo ligeiras divergências de 1 a 2 ms, se o sensor LDR for utilizado.
+              </li>
+            </ol>
+          </li>
+          <li>
+            Detecção e Classificação no Receptor.
+            <ol>
+              <li>
+                O Receptor conta o número de pulsos recebidos até que haja um período de inatividade. Dependendo do número desses pulsos, um LED vermelho, verde ou azul será ligado por 1 s.
+              </li>
+              <li>
+                Internamente o receptor determina o valor de \( T0 \) usando a mesma equação anterior
+                \[
+                  T0 = \dfrac{2000}{\Delta T}
+                \]
+                e, a partir desse valor, estabelece os limites de intervalo de pulsos que correspondem a cada cor, conforme:
+                <ul>
+                  <li>Vermelho: entre 0 e T1 pulsos;</li>
+                  <li>Verde: entre T1 e 2 T1 pulsos;</li>
+                  <li>Azul: entre 2 T1 e 3 T1 pulsos.</li>
+                </ul>
+                Ao final, uma mensagem no display informará a cor detectada e a quantidade de pulsos.
+              </li>
+              <li>
+                Se o número de pulsos for maior do que 3 T1 pulsos, o Receptor exibirá uma mensagem de "pulsos inválidos".
+              </li>
+            </ol>
+          </li>
+        </ol>
       </p>
       
       
