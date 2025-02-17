@@ -643,6 +643,137 @@
             if (linha4.length() > 0) Serial.println(linha4);
         }
       </pre>
+      
+      <h6>Análise do Programa</h6>
+          <p>
+            Este programa implementa um emissor de pulsos de laser controlado por um Arduino Nano. Ele organiza seu fluxo por meio de uma máquina de estados, permitindo que o usuário ajuste o período de pulsação via potenciômetro, realize uma calibração do laser e emita pulsos em quantidades diferentes conforme o botão de cor pressionado.
+          </p>
+          <ol>
+            <li>
+              <p>Bibliotecas e definições iniciais</p>
+              <ul>
+                <li>
+                  São utilizadas as bibliotecas Wire e U8g2lib para a comunicação I2C com o display OLED.
+                </li>
+                <li>
+                  São definidas variáveis globais para os pinos (botões, LED, laser), para a leitura do potenciômetro e para armazenar os valores de calibração e de pulsos (T1, T2, T3).
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>Configuração (Setup)</p>
+              <ul>
+                <li>
+                  Inicializa a comunicação serial a 57600 bps.
+                </li>
+                <li>
+                  Configura os pinos do Arduino como saída (para o LED e o laser) ou entrada (para os botões), assumindo uma ligação com resistor pull-down externo.
+                </li>
+                <li>
+                  Inicia o display OLED e desliga o modo de economia de energia.
+                </li>
+                <li>
+                  Define o estado inicial da máquina de estados como ajuste de período e exibe a mensagem "Emissor Iniciado" tanto no display quanto no Serial.
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>Loop Principal</p>
+              <ul>
+                <li>
+                  A cada iteração, o programa lê os estados dos botões (vermelho, verde, azul e amarelo).
+                </li>
+                <li>
+                  Em seguida, chama a função da máquina de estados, que gerencia a execução dos diferentes modos de operação.
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>Máquina de Estados</p>
+              <ul>
+                <li>
+                  O programa define cinco estados: EST_INICIAL, EST_AJUSTA_PERIODO, EST_CALIBRA_LASER, EST_AGUARDA_ACAO e EST_EMITE_PULSO.
+                </li>
+                <li>
+                  Cada estado tem uma função associada. Por exemplo, no estado EST_AJUSTA_PERIODO, a função mudaFrequencia() é chamada para ajustar o período do laser com base no valor lido pelo potenciômetro.
+                </li>
+                <li>
+                  Após o ajuste, o estado passa para EST_CALIBRA_LASER, onde a função calibra() é executada, fazendo o LED e o laser piscarem por 20 segundos.
+                </li>
+                <li>
+                  Depois da calibração, o sistema entra no estado EST_AGUARDA_ACAO, onde aguarda o usuário apertar um dos botões: o botão amarelo retorna ao ajuste, enquanto os botões de cor (vermelho, verde ou azul) levam à emissão de pulsos.
+                </li>
+                <li>
+                  No estado EST_EMITE_PULSO, a função blink() é chamada para emitir a quantidade de pulsos correspondente à cor selecionada, e o sistema retorna ao estado de espera.
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>Ajuste do Período (mudaFrequencia)</p>
+              <ul>
+                <li>
+                  O potenciômetro é lido (via analogRead em A0) e o valor é mapeado para um intervalo entre 1 e 132 ms, atribuindo esse valor à variável tempoDelay.
+                </li>
+                <li>
+                  O display mostra o período de oscilação, que é o dobro do tempoDelay (pois cada pulso tem um período ligado e outro desligado).
+                </li>
+                <li>
+                  O usuário confirma o ajuste pressionando o botão amarelo; o programa então pausa por 5 segundos e calcula os valores T1, T2 e T3.
+                </li>
+                <li>
+                  T1 é calculado como 0,95 × (2000 / tempoDelay), T2 como 0,95 × 2 × (2000 / tempoDelay) e T3 como 0,95 × 3 × (2000 / tempoDelay). Esses valores representam a quantidade de pulsos a serem emitidos para cada cor.
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>Calibração do Laser (calibra)</p>
+              <ul>
+                <li>
+                  Durante 20 segundos, a função calibra() alterna o estado do LED e do laser a cada tempoDelay ms, fazendo com que pisquem repetidamente.
+                </li>
+                <li>
+                  Após 20 segundos, ambos são desligados e é exibida uma mensagem informando que a calibração foi concluída.
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>Espera por Ação (estadoAguardaAcao)</p>
+              <ul>
+                <li>
+                  Se o botão amarelo for pressionado, o sistema retorna ao estado de ajuste de período.
+                </li>
+                <li>
+                  Se um dos botões de cor (vermelho, verde ou azul) for pressionado, o sistema define a cor selecionada e passa ao estado de emissão de pulsos.
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>Emissão de Pulsos (estadoEmitePulso e blink)</p>
+              <ul>
+                <li>
+                  A função blink(n) é chamada com n igual a T1, T2 ou T3 (convertido para inteiro), emitindo n pulsos. Cada pulso consiste em tempoDelay ms ligado e tempoDelay ms desligado.
+                </li>
+                <li>
+                  Após emitir os pulsos, o programa chama a função mensagem() para exibir, no display e no Serial, a cor selecionada e o número de pulsos emitidos.
+                </li>
+                <li>
+                  O sistema retorna ao estado de espera por ação.
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>Exibição de Mensagens (mensagem e logMensagem)</p>
+              <ul>
+                <li>
+                  A função mensagem() monta as strings que contêm o nome da cor (Vermelho, Verde ou Azul) e o número de pulsos (T1, T2 ou T3) a serem emitidos.
+                </li>
+                <li>
+                  A função logMensagem() exibe essas mensagens no display OLED e as envia ao Serial Monitor, permitindo monitorar o status do sistema.
+                </li>
+              </ul>
+            </li>
+          </ol>
+          <p>
 
 
       
