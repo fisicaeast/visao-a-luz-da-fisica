@@ -271,6 +271,381 @@
         </ol>
       </p>
       
+      <h3>Materiais</h3>
+
+      <p>
+        Para o emissor:
+        <ul>
+          <li>1 Arduino Nano</li>
+          <li>1 Fonte ajustável para protoboard</li>
+          <li>1 matriz de contato ou protoboard MB102</li>
+          <li>4 resistores de 10 k&Omega; e 1 resistor de 330 &Omega;</li>
+          <li>1 Potenciômetro, $P_1 = 10 k&Omega;</li>
+          <li>4 botões (push button), com capas nas cores vermelho, verde, azul e amarelo</li>
+          <li>1 telinha OLED de 0,96 polegadas</li>
+          <li>Cabos de conexão, 23 - 24 AWG (diâmetro entre 0,574 e 0,511 mm)</li>
+          <li>1 LED branco quente</li>
+        </ul>
+      </p>
+
+      <p>
+        Para o receptor utilizamos os itens comuns:
+        <ul>
+          <li>1 Arduino Nano</li>
+          <li>1 Fonte ajustável para protoboard</li>
+          <li>1 matriz de contato ou protoboard MB102</li>
+          <li>4 resistores de 330 &Omega;, e 1 resistor de 10 k&Omega;</li>
+          <li>1 botão (push button), com capa na cor amarela</li>
+          <li>1 telinha OLED de 0,96 polegadas</li>
+          <li>Cabos de conexão, 23 - 24 AWG (diâmetro entre 0,574 e 0,511 mm)</li>
+          <li>4 LEDs nas cores vermelho, verde, azul e branco quente</li>
+        </ul>
+      </p>
+
+      <p>
+        Itens adicionais (dependendo do sensor utilizado):
+        <ul>
+          <li>No caso do LDR, é utilizado 1 resistor de 1 k&Omega;</li>
+          <li>Se é o BPW34, é utilizado um resistor de 410 &Omega;</li>
+        </ul>
+      </p>
+      
+      <h3>Montagem</h3>
+      
+      <h4>Emissor</h4>
+      
+      <div style="flex: 30%; padding-right: 30px">
+        <a href="javascript:newWin('figuras/fig02.png', 'Zoom', '1650')">
+          <img src="figuras/fig02.png" style="width:100%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 02: Emissor, à direita a foto real, à esquerda esquema do feito com fritzing, embaixo o esquema de ligação
+        </p>
+      </div>
+
+      <p>
+        <ul>
+          <li>
+            Coloque o Arduino NANO no centro, próximo a um dos extremos da protoboard MB102.
+          </li>
+          <li>
+            No outro extremo do MB102 coloque a fonte de energia respeitando a polaridade: positivo no trilho vermelho e negativo na trilha azul.
+          </li>
+          <li>
+            Conecte o terminal central do potenciômetro de 10 k&Omega; ao pino A0 do Arduino. Os outros terminais devem ser ligados aos trilhos azul e vermelho para fornecer energia.
+          </li>
+          <li>
+            Ligue o terminal negativo do laser ao trilho azul do protoboard e o pino S do laser ao pino D7 do Arduino.
+          </li>
+          <li>
+            Ligue o ânodo (terminal mais comprido) do LED branco quente ao pino 6 do Arduino, através de um resistor de 330 &Omega;. O cátodo desse LED deve ser ligado ao trilho preto do protoboard.
+          </li>
+          <li>
+            O terminal GND da telinha OLED deve ser ligado à trilha vermelha do protoboard e o terminal VCC à trilha azul. Os terminais SDA e SCL devem ser ligados aos pinos A4 e A5 do Arduino, respectivamente.
+          </li>
+          <li>
+            Os quatro botões devem ser distribuídos no espaço disponível entre o display OLED e a fonte de tensão do protoboard. A configuração adotada para a ligação com o Arduino é a chamada "Pull-down": Um dos lados do botão é conectado à fonte de energia (trilho vermelho), e o outro terminal é conectado ao trilho azul através de um resistor de R = 10 k&Omega;. Um dos outros dois terminais (aquele oposto ao terminal em série com a resistência) é ligado diretamente aos pinos D5, D4, D3, D2; relativos aos botões que estão próximos ao OLED, em direção à fonte de tensão do protoboard.
+          </li>
+        </ul>
+      </p>
+      
+      <div style="flex: 30%; padding-right: 30px">
+        <a href="javascript:newWin('figuras/fig03.png', 'Zoom', '1650')">
+          <img src="figuras/fig03.png" style="width:100%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 03: Esquema de ligação do emissor
+        </p>
+      </div>
+      
+      <h5>Programação</h5>
+      
+      <p>
+        Este programa é uma versão melhorada do utilizado originalmente. A essência do programa original não foi modificada somante alterando a organização e estruturação do mesmo, alterando o nome das variáveis a fim de tornar elas mais em acordo com seu uso dentro do programa
+      </p>
+      
+      <pre class="brush: cpp;">
+        #include &lt;Wire.h&gt;
+        #include &lt;U8g2lib.h&gt;
+
+        // ================== DEFINIÇÕES E VARIÁVEIS GLOBAIS ==================
+
+        // Display
+        #define MY_FONT u8g2_font_9x18_tr
+        U8G2_SSD1306_128X64_NONAME_1_HW_I2C display(U8G2_R0, /* reset=*/ U8X8_PIN_NONE); // Voltamos ao construtor C++
+
+        // Pinos
+        int pinBotaoR = 2;
+        int pinBotaoG = 3;
+        int pinBotaoB = 4;
+        int pinBotaoY = 5;
+        int pinLed    = 6;
+        int pinLaser  = 7;
+
+        // Leitura do potenciômetro
+        int valor_pot;
+        int tempoDelay = 10;
+
+        // Quantidade de pulsos (float)
+        float T1, T2, T3;
+
+        // Porcentagem de pulsos
+        #define PORC_PULSOS 0.95f
+
+        // Estados dos botões (voltamos a usar bool)
+        bool sitBotaoR = false; // false = LOW = não pressionado
+        bool sitBotaoG = false;
+        bool sitBotaoB = false;
+        bool sitBotaoY = false;
+
+        // Variáveis de calibração
+        unsigned long t1 = 0, t2 = 0, t1Local;
+        bool estado = false;
+
+        // Cor selecionada (1=R, 2=G, 3=B)
+        int corSelecionada = 0;
+
+        // ================== MÁQUINA DE ESTADOS ==================
+
+        enum EstadoEmissor {
+          EST_INICIAL,
+          EST_AJUSTA_PERIODO,
+          EST_CALIBRA_LASER,
+          EST_AGUARDA_ACAO,
+          EST_EMITE_PULSO
+        };
+
+        EstadoEmissor estadoAtual = EST_INICIAL;
+
+        // ================== PROTÓTIPOS DE FUNÇÕES ==================
+
+        void maquinaDeEstadosEmissor();
+        void estadoAjustaPeriodo();
+        void estadoCalibraLaser();
+        void estadoAguardaAcao();
+        void estadoEmitePulso();
+        void blink(int n);
+        void calibra();
+        void mudaFrequencia();
+        void mensagem(int cor);
+        void logMensagem(const String& linha1, const String& linha2 = "", const String& linha3 = "", const String& linha4 = ""); // Usando String
+
+
+        // ================== SETUP ==================
+
+        void setup() {
+            Serial.begin(57600);
+
+            pinMode(pinLed, OUTPUT);
+            pinMode(pinLaser, OUTPUT);
+            pinMode(pinBotaoR, INPUT); // Pull-down externo, então INPUT
+            pinMode(pinBotaoG, INPUT);
+            pinMode(pinBotaoB, INPUT);
+            pinMode(pinBotaoY, INPUT);
+
+            // Inicializa display (C++)
+            Wire.begin();
+            display.begin();        // Muito mais simples!
+            display.setPowerSave(0); // Desliga power save
+
+            estadoAtual = EST_AJUSTA_PERIODO;
+            logMensagem("Emissor Iniciado");
+        }
+
+        // ================== LOOP PRINCIPAL ==================
+
+        void loop() {
+            // Leitura dos botões (HIGH = pressionado, LOW = não pressionado)
+            sitBotaoR = digitalRead(pinBotaoR);
+            sitBotaoG = digitalRead(pinBotaoG);
+            sitBotaoB = digitalRead(pinBotaoB);
+            sitBotaoY = digitalRead(pinBotaoY);
+
+            // Executa a máquina de estados
+            maquinaDeEstadosEmissor();
+        }
+
+        // ------------------ MÁQUINA DE ESTADOS ------------------
+        void maquinaDeEstadosEmissor() {
+          switch (estadoAtual) {
+            case EST_INICIAL:
+              break;
+
+            case EST_AJUSTA_PERIODO:
+              estadoAjustaPeriodo();
+              break;
+
+            case EST_CALIBRA_LASER:
+              estadoCalibraLaser();
+              break;
+
+            case EST_AGUARDA_ACAO:
+              estadoAguardaAcao();
+              break;
+
+            case EST_EMITE_PULSO:
+              estadoEmitePulso();
+              break;
+          }
+        }
+
+        // ------------------ ESTADO: AJUSTA PERIODO ------------------
+        void estadoAjustaPeriodo() {
+          mudaFrequencia();
+          estadoAtual = EST_CALIBRA_LASER;
+        }
+
+        // ------------------ ESTADO: CALIBRA LASER ------------------
+        void estadoCalibraLaser() {
+          calibra();
+          estadoAtual = EST_AGUARDA_ACAO;
+        }
+
+        // ------------------ ESTADO: AGUARDA AÇÃO (BOTÕES) ------------------
+        void estadoAguardaAcao() {
+            // Se o botão Y for pressionado, voltamos para ajustar período.
+          if (sitBotaoY == HIGH) { // Agora HIGH significa pressionado.
+            estadoAtual = EST_AJUSTA_PERIODO;
+            logMensagem("Botao amarelo", "Voltando Ajuste");
+            return;
+          }
+          // Se algum dos botões R, G ou B for pressionado, vamos emitir pulso.
+          if (sitBotaoR == HIGH) { // Agora HIGH significa pressionado.
+            corSelecionada = 1; // Vermelho
+            estadoAtual = EST_EMITE_PULSO;
+            logMensagem("Botao vermelho");
+          }
+          else if (sitBotaoG == HIGH) { // Agora HIGH significa pressionado.
+            corSelecionada = 2; // Verde
+            estadoAtual = EST_EMITE_PULSO;
+            logMensagem("Botao verde");
+          }
+          else if (sitBotaoB == HIGH) { // Agora HIGH significa pressionado.
+            corSelecionada = 3; // Azul
+            estadoAtual = EST_EMITE_PULSO;
+            logMensagem("Botao azul");
+          }
+        }
+
+        // ------------------ ESTADO: EMITE PULSO ------------------
+        void estadoEmitePulso() {
+          // Emite a quantidade de pulsos *ajustada* conforme a cor.
+          if (corSelecionada == 1) {
+            blink(static_cast&lt;int&gt;(T1)); // Converte float para int
+            mensagem(1);
+          } else if (corSelecionada == 2) {
+            blink(static_cast&lt;int&gt;(T2)); // Cast para int
+            mensagem(2);
+          } else if (corSelecionada == 3) {
+            blink(static_cast&lt;int&gt;(T3)); // Cast para int
+            mensagem(3);
+          }
+          estadoAtual = EST_AGUARDA_ACAO;
+        }
+
+        // ================== FUNÇÕES DE APOIO ==================
+
+        void blink(int n){
+          for (int i=0; i < n; i++){
+            digitalWrite(pinLed,   HIGH);
+            digitalWrite(pinLaser, HIGH);
+            delay(tempoDelay);
+            digitalWrite(pinLaser, LOW);
+            digitalWrite(pinLed,   LOW);
+            delay(tempoDelay);
+          }
+        }
+
+        void calibra(){
+          t1Local = millis();
+          do {
+            t2 = millis();
+            if (t2 - t1 >= tempoDelay){
+              t1 = t2;
+              digitalWrite(pinLaser, estado);
+              digitalWrite(pinLed,   estado);
+              estado   = !estado;
+            }
+          } while (millis() - t1Local < 20000);
+
+          digitalWrite(pinLaser, LOW);
+          digitalWrite(pinLed,   LOW);
+          logMensagem("Calibracao", "concluida ...", "Aperte algum", "botao");
+        }
+
+        // Funções com Modificações (mudaFrequencia, mensagem, logMensagem):
+
+        void mudaFrequencia() {
+            logMensagem("Aj. o Periodo", "Amarelo para sair");
+
+            do {
+                valor_pot = analogRead(A0);
+                tempoDelay = map(valor_pot, 0, 1023, 1, 132); // Simplificado com map() do Arduino
+
+                logMensagem("Aj. o periodo", "Periodo: " + String(2 * tempoDelay) + " ms", "Amarelo para", "sair"); // Usando String
+
+                sitBotaoY = digitalRead(pinBotaoY);
+            } while (sitBotaoY == LOW);
+
+            logMensagem("Ligue", "o receptor");
+            delay(5000);
+
+            // Calcula T1, T2 e T3 (sem porcentagem primeiro)
+            float T1_original = (2000.0f / tempoDelay);
+            float T2_original = 2.0f * T1_original;
+            float T3_original = 3.0f * T1_original;
+
+            // Aplica a porcentagem
+            T1 = T1_original * PORC_PULSOS;
+            T2 = T2_original * PORC_PULSOS;
+            T3 = T3_original * PORC_PULSOS;
+
+            logMensagem("Periodo Ajustado",
+                        "T1: " + String(int(T1)),  // Conversão implícita e explícita para int
+                        "T2: " + String(int(T2)),
+                        "T3: " + String(int(T3)));
+
+            t1 = millis(); // Para a calibração.
+        }
+
+        void mensagem(int cor) {
+            String linha1;
+            String linha2;
+
+            if (cor == 1) {
+                linha1 = "Vermelho:";
+                linha2 = String(int(T1)) + " pulsos"; // String + int
+            } else if (cor == 2) {
+                linha1 = "Verde:";
+                linha2 = String(int(T2)) + " pulsos";
+            } else if (cor == 3) {
+                linha1 = "Azul:";
+                linha2 = String(int(T3)) + " pulsos";
+            }
+
+            logMensagem(linha1, linha2);
+        }
+
+        void logMensagem(const String& linha1, const String& linha2, const String& linha3, const String& linha4) {
+            display.firstPage();
+            do {
+                display.setFont(MY_FONT);
+                display.drawStr(0, 15, linha1.c_str());  // Correção aqui: drawStr, e .c_str()
+                if (linha2.length() > 0) display.drawStr(0, 30, linha2.c_str()); // Correção aqui
+                if (linha3.length() > 0) display.drawStr(0, 45, linha3.c_str()); // Correção aqui
+                if (linha4.length() > 0) display.drawStr(0, 60, linha4.c_str()); // Correção aqui
+            } while (display.nextPage());
+
+            // Saída para o Serial Monitor (agora usando print/println)
+            Serial.println(linha1);
+            if (linha2.length() > 0) Serial.println(linha2);
+            if (linha3.length() > 0) Serial.println(linha3);
+            if (linha4.length() > 0) Serial.println(linha4);
+        }
+      </pre>
+
+
+      
       
 <!--      <h6><a href="exemplos/exemplo3.1.39.html" target="_blank">Exemplo 3.1.39</a></h6>
       <p>
