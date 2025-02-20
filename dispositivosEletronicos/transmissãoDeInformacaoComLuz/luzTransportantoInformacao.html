@@ -807,7 +807,7 @@
       </div>
       
       
-      <h5>Programação</h5>
+      <h5>Programação LDR</h5>
       
       <p>
         Este programa é uma versão melhorada do utilizado originalmente. A essência do programa original não foi modificada somante alterando a organização e estruturação do mesmo, alterando o nome das variáveis a fim de tornar elas mais em acordo com seu uso dentro do programa
@@ -1385,6 +1385,570 @@
           </ul>
         </li>
       </ol>
+      
+      <h5>Programação BPW34</h5>
+      
+      <p>
+        Os programas para o LDR e o BPW34, embora compartilhem similaridades estruturais, diferem fundamentalmente na lógica de detecção dos pulsos do laser devido às características dos sensores. O BPW34, um fotodiodo, possui um tempo de resposta significativamente superior ao do LDR, particularmente no tempo de subida. Essa rapidez permite que uma simples verificação de aumento na leitura analógica, acima de um limiar, seja suficiente para detectar o estado "HIGH" (alto) do pulso. No código original, esse limiar é definido como 20 unidades do conversor analógico-digital (ADC) acima da leitura da luz ambiente.  O ADC mapeia a tensão de entrada (0-5V) para valores digitais (0-1023), e o aumento dessas unidades indica o incremento na corrente gerada pelo fotodiodo devido à luz do laser.
+      </p>
+      
+      <p>
+        Em contraste, o LDR, como parte de um divisor de tensão, apresenta uma relação inversa entre a luz incidente e a tensão medida pelo Arduino. Uma maior iluminação diminui a resistência do LDR e, consequentemente, a tensão sobre ele. O limiar de detecção, frequentemente definido como 0.7079 vezes o valor da luz ambiente (correspondente a -3dB), é utilizado porque representa uma redução significativa na amplitude do sinal (para aproximadamente 1/√2 do seu valor original), um ponto de referência comum em eletrônica, como na determinação da frequência de corte em filtros. 
+      </p>
+      
+      <div style="flex: 30%; padding-right: 30px">
+        <a href="javascript:newWin('figuras/fig06.png', 'Zoom', '1650')">
+          <img src="figuras/fig06.png" style="width:100%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 06: Captura com o osciloscópio das curvas de tensão lidas pelo Arduino do sinal emitido (em amarelo) e do sinal recebido (em azul) pelo LDR. A escala horizontal está em milissegundos e a vertical em volts
+        </p>
+      </div>
+      
+      <p>
+        Para ilustrar as diferenças entre esses receptores, observemos os sinais de tensão medidos com um osciloscópio (Figuras 06 e 07). No LDR, um pulso de laser causa uma queda abrupta na tensão, seguida por uma recuperação lenta ao valor correspondente à luz ambiente quando o laser desliga. Já no BPW34, a tensão medida é menor quando o laser está desligado e aumenta com o pulso de laser, e neste caso o tempo de subida é mais rápido que o de descida.
+      </p>
+      
+      <div style="flex: 30%; padding-right: 30px">
+        <a href="javascript:newWin('figuras/fig07.png', 'Zoom', '1650')">
+          <img src="figuras/fig07.png" style="width:100%">
+        </a>
+        <p style="text-align: center; font-size:80%">
+          Figura 07: Captura com o osciloscópio das curvas de tensão lidas pelo Arduino do sinal emitido (em amarelo) e do sinal recebido (em azul) pelo BPW34. A escala horizontal está em milissegundos e a vertical em volts
+        </p>
+      </div>
+      
+      <p>
+        Outra diferença marcante é o tempo de resposta. O LDR (Figura 06) leva cerca de 200 ms para retornar ao nível da luz ambiente após o pulso, enquanto o BPW34 (Figura 07) retorna em aproximadamente 1 ms. Além disso, a variação de tensão entre os estados "com laser" e "sem laser" é significativamente menor no BPW34 (cerca de 0,5 V) do que no LDR (cerca de 3,4 V). Essa diferença é crucial para entender a função do resistor em série em cada circuito. No divisor de tensão com o LDR, o resistor é fundamental para determinar a faixa de tensão de saída. Já no circuito com o BPW34, o resistor atua principalmente como um limitador de corrente, convertendo a corrente gerada pelo fotodiodo em uma tensão mensurável, uma vez que o BPW34 se comporta mais como uma fonte de corrente do que como um resistor variável.
+      </p>
+      
+      <p>
+        A seguir o código para o caso em que o BPW34 é usado como sensor
+      </p>
+      
+      <pre class="brush: cpp;">
+        #include &lt;Wire.h&gt;
+        #include &lt;U8glib.h&gt;
+
+        // --- Definições e Constantes ---
+        #define OLED_ADDRESS 0x3C
+        #define MY_FONT u8g_font_9x18
+        #define TEMPO_LIMITE_INATIVIDADE_CALIBRACAO 500  // 0.5 segundos em ms
+        // Removida a escala de luz ambiente, pois agora usamos uma diferença fixa
+        #define LIMIAR_SENSOR 20 // Valor limiar fixo para o BPW34
+
+        // Pinos (ajustados para corresponder ao Programa 3 original)
+        const int PIN_LED_AZUL     = 3;
+        const int PIN_LED_VERDE    = 4;
+        const int PIN_LED_VERMELHO = 5;
+        const int PIN_LED_OK       = 6;
+        const int PIN_BOTAO_Y      = 7;
+        const int PIN_SENSOR_LUZ   = A0;  // BPW34
+
+        // --- Variáveis Globais ---
+        int valorLuzAmbiente = 0;
+        int contadorPulsos = 0;
+        unsigned long ultimoPulso = 0;
+        bool sensorAnterior = false;
+
+        unsigned long periodoLaser = 0;
+        int limitePulsosVermelho, limitePulsosVerde, limitePulsosAzul;
+        unsigned long tempoLimiteInatividade = 0;
+
+        bool calibracaoConcluida = false;  // Indica se a calibração foi concluída
+        bool aguardandoNovoPulso = false;  // Para evitar contagens espúrias
+
+        // Variáveis para processamento não bloqueante dos pulsos
+        bool processandoPulsos = false;
+        unsigned long tempoInicioProcessoPulsos = 0;
+        int ledAcionado = -1;
+
+        // Variáveis para o piscar de LED de forma não bloqueante
+        bool blinkActive = false;
+        unsigned long blinkIntervalNB = 0;
+        unsigned long lastBlinkTimeNB = 0;
+        int blinkCountTarget = 0;
+        int blinkCountNB = 0;
+        int blinkPinNB = 0;
+
+        // --- Instância do Display OLED com U8glib ---
+        U8GLIB_SSD1306_128X64 u8g(OLED_ADDRESS);
+
+        // --- Máquina de Estados para Calibração ---
+        enum EstadoCalibracao {
+          INICIO_CALIBRACAO,
+          MEDINDO_TRANSICOES,
+          CALCULANDO_RESULTADOS,
+          AGUARDANDO_COR
+        };
+        EstadoCalibracao estadoAtualCalibracao = INICIO_CALIBRACAO;
+
+        // Variáveis para a calibração
+        unsigned long tLdrOld, t1Local;
+        bool estadoLdrOld;
+        unsigned long dutyCiclePositivoAcumuladoMs, dutyCicleNegativoAcumuladoMs;
+        unsigned long contadorAmostrasPositivas, contadorAmostrasNegativas;
+        unsigned long T2;
+        unsigned long ultimoPulsoLaser;
+
+        // Variáveis para o estado não bloqueante da fase de cálculo
+        // Fases: 0 = iniciar; 1 = aguardar 1500ms; 2 = blink LED; 3 = aguardar 2500ms e finalizar.
+        int faseCalculo = 0;
+        unsigned long tempoInicioFaseCalculo = 0;
+        float avgAltoGlobal = 0.0;
+        float avgBaixoGlobal = 0.0;
+        float DpGlobal = 0.0;
+        float DmGlobal = 0.0;
+
+
+        // --- Protótipos ---
+        void inicializarDisplay();
+        void configurarPinos();
+        int lerSensorLuz();
+        void atualizarContadorPulsos();
+        bool verificarTempoLimitePulsos();
+        void iniciarProcessamentoPulsos();
+        void processarCorPulsosNB();
+        void acenderLED(int pinoLED, const char* corTexto, int numPulsos);
+        void apagarLEDPulsos();
+        void determinarLuzAmbiente(); // Simplificada para BPW34
+        void botaoCalibracao();
+        void exibirMensagemCor(const char* corTexto, int numPulsos);
+        void exibirMensagem(const char* linha1, const char* linha2 = "", const char* linha3 = "", const char* linha4 = "");
+        void exibirMensagemSerial(const char* linha1, const char* linha2 = "", const char* linha3 = "", const char* linha4 = "");
+        void atualizarBlinkLED();
+        void aguardarPressionarBotao();
+
+        void inicializarCalibracaoLaser();
+        void estadoMedirTransicoes();
+        void estadoCalcularResultados();
+        void estadoAguardarCor();
+        void calibrarLaser();
+        void calcularPeriodoEDutyCycle(unsigned long dutyCiclePositivoAcumuladoMs,
+                                        unsigned long dutyCicleNegativoAcumuladoMs,
+                                        unsigned long contadorAmostrasPositivas,
+                                        unsigned long contadorAmostrasNegativas,
+                                        unsigned long &T2);
+        bool verificarFrequenciaAlta(unsigned long T2);
+        void exibirResultadosCalibracao(unsigned long T2, int Dp, int Dm);
+
+        // --- Implementação das Funções ---
+
+        // Inicializa o display usando U8glib (igual ao Programa 2)
+        void inicializarDisplay() {
+          Wire.begin();
+          delay(100);  // Aguarda estabilização do I2C
+          u8g.firstPage();
+          do {
+            u8g.setFont(MY_FONT);
+            u8g.drawStr(0, 10, "Inicializando OLED...");
+          } while (u8g.nextPage());
+        }
+
+        void configurarPinos() {
+          pinMode(PIN_LED_VERMELHO, OUTPUT);
+          pinMode(PIN_LED_VERDE, OUTPUT);
+          pinMode(PIN_LED_AZUL, OUTPUT);
+          pinMode(PIN_LED_OK, OUTPUT);
+          pinMode(PIN_BOTAO_Y, INPUT);
+          pinMode(PIN_SENSOR_LUZ, INPUT);  // BPW34
+        }
+
+        int lerSensorLuz() {
+          return analogRead(PIN_SENSOR_LUZ);
+        }
+
+        void atualizarContadorPulsos() {
+          if (calibracaoConcluida && !aguardandoNovoPulso) {
+            int leitura = lerSensorLuz();
+            // Usa a diferença fixa para o BPW34, em vez de comparar com um valor de fundo
+            bool sensorAtivo = (leitura - valorLuzAmbiente > LIMIAR_SENSOR);
+            if (!sensorAnterior && sensorAtivo) {
+              contadorPulsos++;
+              ultimoPulso = millis();
+            }
+            sensorAnterior = sensorAtivo;
+          }
+        }
+
+        bool verificarTempoLimitePulsos() {
+          return calibracaoConcluida && ((millis() - ultimoPulso) > tempoLimiteInatividade) && (contadorPulsos > 0);
+        }
+
+        // Inicia o processamento dos pulsos (igual ao Programa 2)
+        void iniciarProcessamentoPulsos() {
+          if (!processandoPulsos) {
+            if (contadorPulsos <= limitePulsosVermelho) {
+              digitalWrite(PIN_LED_VERMELHO, HIGH);
+              exibirMensagemCor("vermelho", contadorPulsos);
+              ledAcionado = PIN_LED_VERMELHO;
+            } else if (contadorPulsos <= limitePulsosVerde) {
+              digitalWrite(PIN_LED_VERDE, HIGH);
+              exibirMensagemCor("verde", contadorPulsos);
+              ledAcionado = PIN_LED_VERDE;
+            } else if (contadorPulsos <= limitePulsosAzul) {
+              digitalWrite(PIN_LED_AZUL, HIGH);
+              exibirMensagemCor("azul", contadorPulsos);
+              ledAcionado = PIN_LED_AZUL;
+            } else {
+              char buffer[32];
+              snprintf(buffer, sizeof(buffer), "Pulsos invalidos: %d", contadorPulsos);
+              exibirMensagem(buffer);
+              aguardandoNovoPulso = true;
+              ledAcionado = -1;
+            }
+            processandoPulsos = true;
+            tempoInicioProcessoPulsos = millis();
+          }
+        }
+
+        // Verifica de forma não bloqueante (igual ao Programa 2)
+        void processarCorPulsosNB() {
+          if (!processandoPulsos && verificarTempoLimitePulsos()) {
+            iniciarProcessamentoPulsos();
+          }
+          if (processandoPulsos && (millis() - tempoInicioProcessoPulsos >= 1000)) {
+            apagarLEDPulsos();
+            processandoPulsos = false;
+            contadorPulsos = 0;
+          }
+        }
+
+        void acenderLED(int pinoLED, const char* corTexto, int numPulsos) {
+          digitalWrite(pinoLED, HIGH);
+          exibirMensagemCor(corTexto, numPulsos);
+        }
+
+        void apagarLEDPulsos() {
+          const int leds[] = {PIN_LED_VERMELHO, PIN_LED_VERDE, PIN_LED_AZUL, PIN_LED_OK};
+          for (unsigned int i = 0; i < sizeof(leds) / sizeof(leds[0]); i++) {
+            digitalWrite(leds[i], LOW);
+          }
+        }
+
+        // Determina a luz ambiente (simplificada para BPW34)
+        void determinarLuzAmbiente() {
+            long somaLuz = 0;
+            int contador = 0;
+            exibirMensagem("Medindo luz","ambiente...");
+            // Realiza várias leituras e calcula a média
+            unsigned long tempoInicial = millis();
+            while(millis() - tempoInicial < 2000){
+              somaLuz += lerSensorLuz();
+              contador++;
+              delay(100);
+            }
+
+            valorLuzAmbiente = somaLuz/contador;
+
+            char buffer1[32], buffer2[32];
+            snprintf(buffer1, sizeof(buffer1), "Luz ambiente:");
+            snprintf(buffer2, sizeof(buffer2), "%d", valorLuzAmbiente);
+            exibirMensagem(buffer1, buffer2);
+
+            Serial.print("Luz Ambiente (BPW34): ");
+            Serial.println(valorLuzAmbiente);
+
+            delay(2000);
+        }
+
+
+
+        void inicializarCalibracaoLaser() {
+          // Mesmas inicializações do Programa 2
+          dutyCiclePositivoAcumuladoMs = 0;
+          dutyCicleNegativoAcumuladoMs = 0;
+          contadorAmostrasPositivas = 0;
+          contadorAmostrasNegativas = 0;
+          T2 = 0;
+          tLdrOld = millis();
+          t1Local = millis();
+          estadoLdrOld = false;
+          ultimoPulsoLaser = millis();
+          estadoAtualCalibracao = MEDINDO_TRANSICOES;
+          exibirMensagem("Medindo", "transicoes", "do laser...");
+          calibracaoConcluida = false;
+          contadorPulsos = 0;
+          aguardandoNovoPulso = false;
+          faseCalculo = 0; // Reinicia a fase de cálculo
+        }
+
+        void estadoMedirTransicoes() {
+          unsigned long tLdr;
+          bool estadoLdr;
+          long dtLocal;
+
+          int leituraLuz = lerSensorLuz();
+          // Usa a diferença fixa em vez da comparação com valor de fundo
+          estadoLdr = (leituraLuz - valorLuzAmbiente > LIMIAR_SENSOR);
+          tLdr = millis();
+
+          if (estadoLdr != estadoLdrOld) {
+            dtLocal = tLdr - tLdrOld;
+            if (estadoLdrOld) {
+              dutyCiclePositivoAcumuladoMs += dtLocal;
+              contadorAmostrasPositivas++;
+            } else {
+              dutyCicleNegativoAcumuladoMs += dtLocal;
+              contadorAmostrasNegativas++;
+            }
+            tLdrOld = tLdr;
+            estadoLdrOld = estadoLdr;
+            ultimoPulsoLaser = millis();
+          }
+
+          if (millis() - ultimoPulsoLaser > TEMPO_LIMITE_INATIVIDADE_CALIBRACAO) {
+            estadoAtualCalibracao = CALCULANDO_RESULTADOS;
+          }
+        }
+
+        void estadoCalcularResultados() {
+            // Código *exatamente* igual ao do Programa 2
+          if (faseCalculo == 0) {
+            // Realiza os cálculos iniciais
+            calcularPeriodoEDutyCycle(dutyCiclePositivoAcumuladoMs, dutyCicleNegativoAcumuladoMs,
+                                      contadorAmostrasPositivas, contadorAmostrasNegativas, T2);
+
+            if (verificarFrequenciaAlta(T2)) {
+              inicializarCalibracaoLaser();
+              return;
+            }
+
+            if (contadorAmostrasPositivas > 0 && contadorAmostrasNegativas > 0) {
+              avgAltoGlobal = (float)dutyCiclePositivoAcumuladoMs / contadorAmostrasPositivas;
+              avgBaixoGlobal = (float)dutyCicleNegativoAcumuladoMs / contadorAmostrasNegativas;
+              DpGlobal = (int)((avgAltoGlobal / (avgAltoGlobal + avgBaixoGlobal)) * 100.0f);
+              DmGlobal = (int)((avgBaixoGlobal / (avgAltoGlobal + avgBaixoGlobal)) * 100.0f);
+            }
+
+            exibirResultadosCalibracao(T2, (int)DpGlobal, (int)DmGlobal);
+            tempoInicioFaseCalculo = millis();
+            faseCalculo = 1;
+          }
+          else if (faseCalculo == 1) {
+            if (millis() - tempoInicioFaseCalculo >= 1500) {
+              char bufferSerial1[128], bufferSerial2[128], bufferSerial3[128], temp[16];
+              snprintf(bufferSerial1, sizeof(bufferSerial1), "T = %lu ms", T2);
+              dtostrf(avgAltoGlobal, 5, 2, temp);
+              snprintf(bufferSerial2, sizeof(bufferSerial2), "D+: %s ms", temp);
+              dtostrf(avgBaixoGlobal, 5, 2, temp);
+              snprintf(bufferSerial3, sizeof(bufferSerial3), "D-: %s ms", temp);
+              exibirMensagemSerial(bufferSerial1, bufferSerial2, bufferSerial3);
+              exibirMensagem(bufferSerial1, bufferSerial2, bufferSerial3);
+              delay(2000);
+
+              if (periodoLaser > 0) {
+                limitePulsosVermelho = 2000 / periodoLaser;
+                limitePulsosVerde = 2 * limitePulsosVermelho;
+                limitePulsosAzul = 3 * limitePulsosVermelho;
+                tempoLimiteInatividade = 10 * periodoLaser;
+              }
+              // Inicia o piscar do LED OK de forma não bloqueante
+              blinkPinNB = PIN_LED_OK;
+              blinkIntervalNB = periodoLaser;
+              blinkCountTarget = 10;
+              blinkCountNB = 0;
+              lastBlinkTimeNB = millis();
+              blinkActive = true;
+
+              faseCalculo = 2;
+            }
+          }
+          else if (faseCalculo == 2) {
+            // Atualiza o blink LED
+            atualizarBlinkLED();
+            if (!blinkActive) {
+              tempoInicioFaseCalculo = millis();
+              faseCalculo = 3;
+            }
+          }
+          else if (faseCalculo == 3) {
+            if (millis() - tempoInicioFaseCalculo >= 2500) {
+              estadoAtualCalibracao = AGUARDANDO_COR;
+              exibirMensagem("Aguardando cor...");
+              calibracaoConcluida = true;
+              contadorPulsos = 0;
+              faseCalculo = 0;  // Reinicia para a próxima calibração
+            }
+          }
+        }
+
+        void estadoAguardarCor() {
+            // Código *exatamente* igual ao do Programa 2
+          if (aguardandoNovoPulso && (lerSensorLuz() - valorLuzAmbiente > LIMIAR_SENSOR)) {
+            aguardandoNovoPulso = false;
+          }
+        }
+
+        void calibrarLaser() {
+          // Código *exatamente* igual ao do Programa 2, estrutura de switch/case mantida.
+          switch (estadoAtualCalibracao) {
+            case INICIO_CALIBRACAO:
+              inicializarCalibracaoLaser();
+              break;
+            case MEDINDO_TRANSICOES:
+              estadoMedirTransicoes();
+              break;
+            case CALCULANDO_RESULTADOS:
+              estadoCalcularResultados();
+              break;
+            case AGUARDANDO_COR:
+              estadoAguardarCor();
+              break;
+          }
+        }
+
+        void botaoCalibracao() {
+          estadoAtualCalibracao = INICIO_CALIBRACAO;
+          calibrarLaser();
+        }
+
+        void exibirMensagemCor(const char* corTexto, int numPulsos) {
+          char linha1[32], linha2[32], linha3[32], linha4[32];
+          snprintf(linha1, sizeof(linha1), "Cor detectada:");
+          snprintf(linha2, sizeof(linha2), "%s,", corTexto);
+          snprintf(linha3, sizeof(linha3), "num. pulsos:");
+          snprintf(linha4, sizeof(linha4), "%d", numPulsos);
+          exibirMensagem(linha1, linha2, linha3, linha4);
+        }
+
+        void exibirMensagem(const char* linha1, const char* linha2, const char* linha3, const char* linha4) {
+          u8g.firstPage();
+          do {
+            u8g.setFont(MY_FONT);
+            if (linha1 && strlen(linha1) > 0) u8g.drawStr(0, 10, linha1);
+            if (linha2 && strlen(linha2) > 0) u8g.drawStr(0, 25, linha2);
+            if (linha3 && strlen(linha3) > 0) u8g.drawStr(0, 40, linha3);
+            if (linha4 && strlen(linha4) > 0) u8g.drawStr(0, 55, linha4);
+          } while (u8g.nextPage());
+        }
+
+        void exibirMensagemSerial(const char* linha1, const char* linha2, const char* linha3, const char* linha4) {
+          Serial.println(linha1);
+          if (strlen(linha2) > 0) Serial.println(linha2);
+          if (strlen(linha3) > 0) Serial.println(linha3);
+          if (strlen(linha4) > 0) Serial.println(linha4);
+        }
+
+        // Atualiza o piscar do LED de forma não bloqueante (igual ao Programa 2)
+        void atualizarBlinkLED() {
+          if (blinkActive) {
+            if (millis() - lastBlinkTimeNB >= blinkIntervalNB) {
+              // Alterna o estado do LED
+              if (digitalRead(blinkPinNB) == HIGH) {
+                digitalWrite(blinkPinNB, LOW);
+              } else {
+                digitalWrite(blinkPinNB, HIGH);
+              }
+              lastBlinkTimeNB = millis();
+              blinkCountNB++;
+              if (blinkCountNB >= 2 * blinkCountTarget) {
+                digitalWrite(blinkPinNB, LOW);
+                blinkActive = false;
+              }
+            }
+          }
+        }
+
+        void aguardarPressionarBotao() {
+          while (digitalRead(PIN_BOTAO_Y) == LOW) {
+            delay(50); // Debounce simples
+          }
+        }
+
+        void calcularPeriodoEDutyCycle(unsigned long dutyCiclePositivoAcumuladoMs,
+                                        unsigned long dutyCicleNegativoAcumuladoMs,
+                                        unsigned long contadorAmostrasPositivas,
+                                        unsigned long contadorAmostrasNegativas,
+                                        unsigned long &T2)
+        {
+            // Código *exatamente* igual ao do Programa 2
+          unsigned long totalAmostras = contadorAmostrasPositivas + contadorAmostrasNegativas;
+          if (totalAmostras > 0) {
+            periodoLaser = (dutyCiclePositivoAcumuladoMs + dutyCicleNegativoAcumuladoMs) / totalAmostras;
+          } else {
+            periodoLaser = 0;
+          }
+          if (contadorAmostrasPositivas > 0 && contadorAmostrasNegativas > 0) {
+            T2 = (dutyCiclePositivoAcumuladoMs / contadorAmostrasPositivas) +
+                (dutyCicleNegativoAcumuladoMs / contadorAmostrasNegativas);
+          } else {
+            T2 = 0;
+          }
+        }
+
+        bool verificarFrequenciaAlta(unsigned long T2) {
+        // Código *exatamente* igual ao do Programa 2
+          if (T2 == 0) {
+            exibirMensagem("Frequencia muito", "alta, diminua", "e aperte amarelo");
+            aguardarPressionarBotao();
+            return true;
+          }
+          return false;
+        }
+
+        void exibirResultadosCalibracao(unsigned long T2, int Dp, int Dm) {
+        // Código *exatamente* igual ao do Programa 2
+          char linha1[32], linha2[32], linha3[32];
+          snprintf(linha1, sizeof(linha1), "T = %lu ms", T2);
+          snprintf(linha2, sizeof(linha2), "D+ = %d%%", Dp);
+          snprintf(linha3, sizeof(linha3), "D- = %d%%", Dm);  // Correção aqui: linha3, não linha2
+          exibirMensagem(linha1, linha2, linha3);
+          exibirMensagemSerial(linha1, linha2, linha3);
+          delay(2000);
+        }
+
+        void setup() {
+          inicializarDisplay();
+          configurarPinos();
+          Serial.begin(57600);
+
+          determinarLuzAmbiente(); // Simplificada para BPW34
+          exibirMensagem("Aperte o botao", "amarelo para", "calibrar");
+          aguardarPressionarBotao();
+          botaoCalibracao();
+        }
+
+        void loop() {
+          atualizarContadorPulsos();
+          processarCorPulsosNB();
+          calibrarLaser();
+          atualizarBlinkLED(); // Atualiza o piscar do LED (não bloqueante)
+
+          if (digitalRead(PIN_BOTAO_Y) == HIGH) {
+            botaoCalibracao();  // Permite recalibrar
+          }
+        }
+      </pre>
+
+      <h6>Analises do programa - comparação com o programa para o LDR</h6>
+      
+      <ul>
+      <li>Programa para o LDR
+        <ul>
+          <li>Sensor: LDR (Resistor Dependente de Luz).</li>
+          <li>Lógica de Detecção: Procura por <em>quedas</em> na leitura analógica abaixo de um valor de fundo (proporcional à luz ambiente, tipicamente 0.708 vezes a média). A detecção é feita dentro de uma máquina de estados e usa variáveis de estado para evitar múltiplas contagens.</li>
+          <li>Implementação: Não bloqueante, utilizando <code>millis()</code> para controle de tempo.</li>
+          <li>Contagem de Pulsos: Baseada em transições de estado do sensor (de "acima do limiar" para "abaixo do limiar"), com um tempo limite de inatividade adaptativo para determinar o fim de uma sequência de pulsos.</li>
+          <li>Robustez: Alta, devido à abordagem não bloqueante e à lógica de detecção aprimorada.</li>
+          <li>Calibração: Máquina de estados para medição precisa do período e duty cycle do laser, usada para ajustar o tempo limite de inatividade e os limites de contagem de pulsos para cada cor.</li>
+          <li>Limiar: usa um valor proporcional</li>
+        </ul>
+      </li>
+
+      <li>Programa para o BPW34
+        <ul>
+          <li>Sensor: Fotodiodo BPW34.</li>
+          <li>Lógica de Detecção: Procura por <em>aumentos</em> na leitura analógica acima de um limiar fixo (após a subtração de um valor de fundo).  A detecção também é feita dentro de uma máquina de estados e usa variáveis de estado similares.</li>
+          <li>Implementação: Não bloqueante, utilizando <code>millis()</code> para controle de tempo (essencialmente a mesma do programa do LDR).</li>
+          <li>Contagem de Pulsos: Similar ao programa do LDR, baseada em transições de estado (de "abaixo do limiar" para "acima do limiar"), com tempo limite de inatividade adaptativo.</li>
+          <li>Robustez: Alta, pelas mesmas razões do programa do LDR. O BPW34, em geral, oferece ainda maior velocidade e menor ruído que o LDR.</li>
+          <li>Calibração: Máquina de estados idêntica à do programa do LDR em estrutura, mas os valores medidos (leitura do sensor) têm interpretação diferente (corrente do fotodiodo em vez de tensão no divisor de tensão).</li>
+          <li>Limiar: usa um valor fixo</li>
+        </ul>
+      </li>
+    </ul>
+
 
       
       
